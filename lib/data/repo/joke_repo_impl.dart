@@ -37,8 +37,8 @@ class JokeRepositoryImpl extends JokeRepository {
     final List<Joke> jokes = [];
     try {
       final List<SavedJoke> saved = await _databaseDataSource.getSavedJokes();
-      for (SavedJoke s in saved) {
-        jokes.add(s.toDomain());
+      for (int i = 0; i < saved.length; i++) {
+        jokes.add(saved[i].toDomain());
       }
     } catch (e) {
       logger?.log(Level.error, e);

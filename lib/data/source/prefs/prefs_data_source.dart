@@ -29,8 +29,8 @@ class PrefsDataSourceImpl extends PrefsDataSource {
     List<bool> choices = [];
     if (json != null && json.isNotEmpty) {
       final List<dynamic> list = jsonDecode(json) as List;
-      for (final item in list) {
-        choices.add(bool.tryParse(item.toString()) ?? false);
+      for (int i = 0; i < list.length; i++) {
+        choices.add(bool.tryParse(list[i].toString()) ?? false);
       }
       return choices;
     } else {
@@ -61,8 +61,8 @@ class PrefsDataSourceImpl extends PrefsDataSource {
     final List<String> blacklisted = [];
     if (json != null && json.isNotEmpty) {
       final List<dynamic> list = jsonDecode(json) as List<dynamic>;
-      for (final item in list) {
-        blacklisted.add(item.toString());
+      for (int i = 0; i < list.length; i++) {
+        blacklisted.add(list[i].toString());
       }
     }
     logger?.log(Level.info, 'getBlacklist: $blacklisted');
