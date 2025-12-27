@@ -1,0 +1,60 @@
+name: gigglify_rp
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+  auto_route: ^11.1.0
+  dio: ^5.9.0
+  equatable: ^2.0.7
+  flutter_dotenv: ^6.0.0
+  flutter_riverpod: ^3.0.3
+  flutter_secure_storage: ^10.0.0
+  freezed_annotation: ^3.1.0
+  get_it: ^9.2.0
+  intl: ^0.20.2
+  json_annotation: ^4.9.0
+  logger: ^2.6.2
+  objectbox: ^5.0.4
+  objectbox_flutter_libs: any
+  path: ^1.9.1
+  path_provider: ^2.1.5
+  share_plus: ^12.0.1
+  shared_preferences: ^2.5.4
+
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.3.3
+  ionicons: ^0.2.2
+  modal_bottom_sheet: ^3.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  auto_route_generator: ^10.4.0
+  build_runner: ^2.10.4
+  flutter_lints: ^6.0.0
+  freezed: ^3.2.3
+  json_serializable: ^6.11.2
+  objectbox_generator: any
+  riverpod_annotation: ^3.0.3
+  riverpod_generator: ^3.0.3
+
+flutter:
+  assets:
+    - .env
+  uses-material-design: true
+
+flutter_intl:
+  enabled: true
+  arb_dir: lib/presentation/l10n
+  output_dir: lib/presentation/l10n/generated
