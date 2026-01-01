@@ -6,7 +6,7 @@ class SaveChoiceUseCase {
 
   SaveChoiceUseCase(this._choiceRepository);
 
-  void invoke(Choice choices) {
-    _choiceRepository.setChoice(choices);
+  Future<void> invoke(Choice choices) async {
+    await _choiceRepository.setChoice(choices);
   }
 }

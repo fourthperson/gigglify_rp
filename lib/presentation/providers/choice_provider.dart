@@ -20,7 +20,7 @@ class ChoiceNotifier extends StateNotifier<AsyncValue<Choice>> {
 
   void saveChoice(Choice choice) async {
     state = AsyncValue.loading();
-    _saveUseCase.invoke(choice);
+    await _saveUseCase.invoke(choice);
     state = AsyncValue.data(choice);
   }
 }
