@@ -8,7 +8,9 @@ Future<void> initDependencies() async {
   // read info from .env
   final String baseUrl = dotenv.get('API_BASE_URL');
   final List<String> apiPaths = dotenv.get('API_PATHS').split(' ');
-  final List<String> blacklists = dotenv.get('BLACKLIST_CATEGORIES').split(' ');
+  final List<String> blacklistCategories = dotenv
+      .get('BLACKLIST_CATEGORIES')
+      .split(' ');
 
   // logger
   final Logger logger = Logger();
@@ -60,6 +62,7 @@ Future<void> initDependencies() async {
   // choice repository
   final ChoiceRepository choiceRepository = ChoiceRepositoryImpl(
     apiPaths,
+    blacklistCategories,
     prefsDataSource,
   );
 

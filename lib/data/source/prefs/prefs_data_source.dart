@@ -9,9 +9,9 @@ abstract class PrefsDataSource {
 
   Future<void> setChoices(List<bool> choices);
 
-  Future<List<String>> getBlacklist();
+  Future<List<int>> getBlacklist();
 
-  Future<void> setBlackList(List<String> blacklisted);
+  Future<void> setBlackList(List<int> blacklisted);
 }
 
 class PrefsDataSourceImpl extends PrefsDataSource {
@@ -56,13 +56,13 @@ class PrefsDataSourceImpl extends PrefsDataSource {
   }
 
   @override
-  Future<List<String>> getBlacklist() async {
+  Future<List<int>> getBlacklist() async {
     final String? json = await _prefsService.getItem(blacklistKey);
-    final List<String> blacklisted = [];
+    final List<int> blacklisted = [];
     if (json != null && json.isNotEmpty) {
       final List<dynamic> list = jsonDecode(json) as List<dynamic>;
       for (int i = 0; i < list.length; i++) {
-        blacklisted.add(list[i].toString());
+        blacklisted.add(int.tryParse(list[i].toString()) ?? 0);
       }
     }
     logger?.log(Level.info, 'getBlacklist: $blacklisted');
@@ -70,7 +70,7 @@ class PrefsDataSourceImpl extends PrefsDataSource {
   }
 
   @override
-  Future<void> setBlackList(List<String> blacklisted) async {
+  Future<void> setBlackList(List<int> blacklisted) async {
     logger?.log(Level.info, 'setBlackList: $blacklisted');
     final String json = jsonEncode(blacklisted);
     await _prefsService.setItem(blacklistKey, json);

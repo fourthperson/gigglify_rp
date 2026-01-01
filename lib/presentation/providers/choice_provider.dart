@@ -14,7 +14,7 @@ class ChoiceNotifier extends StateNotifier<AsyncValue<Choice>> {
 
   void getChoice() async {
     state = const AsyncValue.loading();
-    final Choice choice =  await _getUseCase.invoke();
+    final Choice choice = await _getUseCase.invoke();
     state = AsyncValue.data(choice);
   }
 

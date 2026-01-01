@@ -2,14 +2,14 @@ import 'package:equatable/equatable.dart';
 
 class Choice extends Equatable {
   final List<bool> choices;
-  final List<String> blacklisted;
+  final List<int> blacklisted;
 
   const Choice({required this.choices, required this.blacklisted});
 
   @override
   List<Object?> get props => [choices];
 
-  Choice copyWith({List<bool>? choices, List<String>? blacklisted}) {
+  Choice copyWith({List<bool>? choices, List<int>? blacklisted}) {
     return Choice(
       choices: choices ?? this.choices,
       blacklisted: blacklisted ?? this.blacklisted,

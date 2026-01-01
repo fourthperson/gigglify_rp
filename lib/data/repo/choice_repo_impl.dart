@@ -4,14 +4,19 @@ import 'package:gigglify_rp/domain/repository/choice_repository.dart';
 
 class ChoiceRepositoryImpl extends ChoiceRepository {
   final List<String> _apiPaths;
+  final List<String> _blacklistCategories;
   final PrefsDataSource _prefsDataSource;
 
-  ChoiceRepositoryImpl(this._apiPaths, this._prefsDataSource);
+  ChoiceRepositoryImpl(
+    this._apiPaths,
+    this._blacklistCategories,
+    this._prefsDataSource,
+  );
 
   @override
   Future<Choice> getChoice() async {
     final List<bool> choices = await _prefsDataSource.getChoices();
-    final List<String> blacklist = await _prefsDataSource.getBlacklist();
+    final List<int> blacklist = await _prefsDataSource.getBlacklist();
     return Choice(choices: choices, blacklisted: blacklist);
   }
 
@@ -35,7 +40,8 @@ class ChoiceRepositoryImpl extends ChoiceRepository {
       return _apiPaths[0];
     }
 
-    final StringBuffer buffer = StringBuffer();
+    // build comma-separated path from choices
+    StringBuffer buffer = StringBuffer();
     for (int i = 0; i < _apiPaths.length; i++) {
       if (choice.choices[i]) {
         buffer.write(_apiPaths[i]);
@@ -48,17 +54,17 @@ class ChoiceRepositoryImpl extends ChoiceRepository {
 
     path = path.isEmpty ? _apiPaths[0] : path;
 
-    // add blacklisted categories to path
-    final StringBuffer buffer2 = StringBuffer();
-    final List<String> blacklisted = choice.blacklisted;
+    // build comma-separated blacklisted categories
+    buffer = StringBuffer();
+    final List<int> blacklisted = choice.blacklisted;
     if (blacklisted.isNotEmpty) {
       for (int i = 0; i < blacklisted.length; i++) {
-        buffer2.write(blacklisted[i]);
+        buffer.write(_blacklistCategories[blacklisted[i]]);
         if (i < blacklisted.length - 1) {
-          buffer2.write(',');
+          buffer.write(',');
         }
       }
-      path = '$path?blacklistFlags=${buffer2.toString()}';
+      path = '$path?blacklistFlags=${buffer.toString()}';
     }
 
     return path;

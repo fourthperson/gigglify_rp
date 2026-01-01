@@ -26,12 +26,12 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
     S.current.category_misc,
   ];
   final List<String> blacklistTexts = [
-    S.current.blacklist_explicit,
-    S.current.blacklist_political,
     S.current.blacklist_religious,
-    S.current.blacklist_nsfw,
+    S.current.blacklist_political,
     S.current.blacklist_racist,
     S.current.blacklist_sexist,
+    S.current.blacklist_explicit,
+    S.current.blacklist_nsfw,
   ];
 
   @override
@@ -113,18 +113,16 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                 itemCount: blacklistTexts.length,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (_, int index) {
-                  final List<String> blacklist =
-                      asyncChoices.value!.blacklisted;
-                  final String label = blacklistTexts[index];
+                  final List<int> blacklist = asyncChoices.value!.blacklisted;
 
                   return _CategoryItem(
-                    checked: blacklist.contains(label.toLowerCase()),
-                    label: label,
+                    checked: blacklist.contains(index),
+                    label: blacklistTexts[index],
                     onTap: (bool checked) {
                       _saveChoices(
                         Choice(
                           choices: asyncChoices.value!.choices,
-                          blacklisted: _toggleBlacklist(blacklist, label),
+                          blacklisted: _toggleBlacklist(blacklist, index),
                         ),
                       );
                     },
@@ -144,15 +142,13 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
   void _saveChoices(Choice choice) =>
       ref.read(choiceNotifier.notifier).saveChoice(choice);
 
-  List<String> _toggleBlacklist(List<String> current, String category) {
-    final List<String> list = List<String>.from(current);
-    final int index = list.indexWhere(
-      (item) => item.toLowerCase() == category.toLowerCase(),
-    );
-    if (index != -1) {
+  List<int> _toggleBlacklist(List<int> current, int index) {
+    final List<int> list = List<int>.from(current);
+    final int foundIndex = list.indexWhere((item) => item == index);
+    if (foundIndex != -1) {
       list.removeAt(index);
     } else {
-      list.add(category.toLowerCase());
+      list.add(index);
     }
     return list;
   }
