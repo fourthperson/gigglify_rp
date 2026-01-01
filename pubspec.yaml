@@ -25,7 +25,7 @@ dependencies:
   json_annotation: ^4.9.0
   logger: ^2.6.2
   objectbox: ^5.0.4
-  objectbox_flutter_libs: any
+  objectbox_flutter_libs: 5.1.0
   path: ^1.9.1
   path_provider: ^2.1.5
   share_plus: ^12.0.1
