@@ -7,6 +7,6 @@ class GetSavedJokesUseCase {
   GetSavedJokesUseCase(this._jokeRepository);
 
   Future<List<Joke>> invoke() async {
-    return _jokeRepository.getSavedJokes();
+    return await _jokeRepository.getSavedJokes();
   }
 }

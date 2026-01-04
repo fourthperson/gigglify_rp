@@ -11,6 +11,6 @@ class GetJokeUseCase {
   Future<Joke?> invoke() async {
     final String path = await _choiceRepository.getPath();
     if (path.trim().isEmpty) return null;
-    return _jokeRepository.getJoke(path);
+    return await _jokeRepository.getJoke(path);
   }
 }

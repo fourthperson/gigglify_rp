@@ -6,7 +6,7 @@ class SaveJokeUseCase {
 
   SaveJokeUseCase(this._jokeRepository);
 
-  void invoke(Joke joke) {
-    _jokeRepository.saveJoke(joke);
+  Future<void> invoke(Joke joke) async {
+    await _jokeRepository.saveJoke(joke);
   }
 }

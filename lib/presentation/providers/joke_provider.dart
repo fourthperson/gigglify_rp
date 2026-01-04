@@ -16,7 +16,7 @@ class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
     state = const AsyncValue.loading();
     final Joke? joke = await _getUseCase.invoke();
     if (joke != null) {
-      _saveUseCase.invoke(joke);
+      await _saveUseCase.invoke(joke);
     }
     state = AsyncValue.data(joke);
   }
