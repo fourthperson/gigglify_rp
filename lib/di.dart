@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gigglify_rp/data/source/db/gig_db.dart';
 import 'package:gigglify_rp/env.dart';
 import 'package:injectable/injectable.dart';
 import 'package:gigglify_rp/di.config.dart';

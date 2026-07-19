@@ -5,7 +5,6 @@ import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/repository/joke_repository.dart';
 
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
-import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 // @LazySingleton(as: JokeRepository)
