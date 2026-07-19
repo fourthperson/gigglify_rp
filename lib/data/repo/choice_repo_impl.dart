@@ -41,30 +41,21 @@ class ChoiceRepositoryImpl extends ChoiceRepository {
     }
 
     // build comma-separated path from choices
-    StringBuffer buffer = StringBuffer();
+    final List<String> categories = [];
     for (int i = 0; i < _apiPaths.length; i++) {
       if (choice.choices[i]) {
-        buffer.write(_apiPaths[i]);
-        buffer.write(',');
+        categories.add(_apiPaths[i]);
       }
     }
 
-    String path = buffer.toString();
-    path = path.substring(0, path.length - 1);
+    String path = categories.isEmpty ? _apiPaths[0] : categories.join(',');
 
-    path = path.isEmpty ? _apiPaths[0] : path;
-
-    // build comma-separated blacklisted categories
-    buffer = StringBuffer();
-    final List<int> blacklisted = choice.blacklisted;
-    if (blacklisted.isNotEmpty) {
-      for (int i = 0; i < blacklisted.length; i++) {
-        buffer.write(_blacklistCategories[blacklisted[i]]);
-        if (i < blacklisted.length - 1) {
-          buffer.write(',');
-        }
+    if (choice.blacklisted.isNotEmpty) {
+      final List<String> blacklist = [];
+      for (int i = 0; i < choice.blacklisted.length; i++) {
+        blacklist.add(_blacklistCategories[choice.blacklisted[i]]);
       }
-      path = '$path?blacklistFlags=${buffer.toString()}';
+      path = '$path?blacklistFlags?=${blacklist.join(',')}';
     }
 
     return path;
