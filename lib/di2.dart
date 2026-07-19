@@ -4,13 +4,10 @@ final GetIt locator = GetIt.instance;
 
 Future<void> initDependencies() async {
   // load .env file
-  await dotenv.load();
   // read info from .env
-  final String baseUrl = dotenv.get('API_BASE_URL');
-  final List<String> apiPaths = dotenv.get('API_PATHS').split(' ');
-  final List<String> blacklistCategories = dotenv
-      .get('BLACKLIST_CATEGORIES')
-      .split(' ');
+  final String baseUrl = Env.apiBaseUrl;
+  final List<String> apiPaths = Env.apiPaths.split(' ');
+  final List<String> blacklistCategories = Env.blacklistCategories.split(' ');
 
   // logger
   final Logger logger = Logger();
@@ -61,15 +58,15 @@ Future<void> initDependencies() async {
 
   // choice repository
   final ChoiceRepository choiceRepository = ChoiceRepositoryImpl(
-    apiPaths,
-    blacklistCategories,
-    prefsDataSource,
+    apiPaths: apiPaths,
+    blacklistCategories: blacklistCategories,
+    prefsDataSource: prefsDataSource,
   );
 
   // joke repository
   final JokeRepository jokeRepository = JokeRepositoryImpl(
-    apiDataSource,
-    databaseDataSource,
+    apiDataSource: apiDataSource,
+    databaseDataSource: databaseDataSource,
     logger: logger,
   );
 

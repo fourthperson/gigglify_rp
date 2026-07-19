@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:gigglify_rp/data/source/prefs/prefs_data_source.dart';
+import 'package:gigglify_rp/env.dart';
 import 'package:logger/logger.dart';
 import 'package:gigglify_rp/app.dart';
 import 'package:gigglify_rp/data/repo/choice_repo_impl.dart';
