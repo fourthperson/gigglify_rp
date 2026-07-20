@@ -31,7 +31,7 @@ abstract class GigglifyModule {
         connectTimeout: const Duration(milliseconds: 15000),
         receiveTimeout: const Duration(milliseconds: 15000),
         receiveDataWhenStatusError: false,
-        validateStatus: (status) => true,
+        validateStatus: (int? status) => true,
         contentType: 'application/json; charset=UTF-8',
         baseUrl: Env.apiBaseUrl,
         responseType: ResponseType.plain,

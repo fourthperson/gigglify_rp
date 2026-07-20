@@ -6,7 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:gigglify_rp/data/source/prefs/prefs_data_source.dart';
 import 'package:gigglify_rp/env.dart';
 import 'package:logger/logger.dart';
-import 'package:gigglify_rp/app.dart';
+import 'package:gigglify_rp/presentation/app.dart';
 import 'package:gigglify_rp/data/repo/choice_repo_impl.dart';
 import 'package:gigglify_rp/data/repo/joke_repo_impl.dart';
 import 'package:gigglify_rp/data/source/api/api_data_source.dart';
