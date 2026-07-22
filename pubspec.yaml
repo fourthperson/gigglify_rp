@@ -60,3 +60,7 @@ flutter_intl:
   enabled: true
   arb_dir: lib/presentation/l10n
   output_dir: lib/presentation/l10n/generated
+
+objectbox:
+  # Generates objectbox.g.dart and objectbox-model.json in lib/output_dir
+  output_dir: data/source/db

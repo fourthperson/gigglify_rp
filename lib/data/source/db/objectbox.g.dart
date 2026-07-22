@@ -14,37 +14,37 @@ import 'package:objectbox/internal.dart'
 import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
-import 'data/entity/db/saved_joke.dart';
+import '../../../data/entity/db/saved_joke.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
-    id: const obx_int.IdUid(1, 6310562778022901715),
+    id: const obx_int.IdUid(1, 1748776936864259395),
     name: 'SavedJoke',
-    lastPropertyId: const obx_int.IdUid(4, 4815179238963897465),
+    lastPropertyId: const obx_int.IdUid(4, 2570658070741351961),
     flags: 0,
     properties: <obx_int.ModelProperty>[
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(1, 1584139798329551945),
+        id: const obx_int.IdUid(1, 4908521040180967584),
         name: 'id',
         type: 6,
         flags: 1,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(2, 9085313476644113268),
+        id: const obx_int.IdUid(2, 2591282325500632360),
         name: 'time',
         type: 6,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(3, 7496301619338473545),
+        id: const obx_int.IdUid(3, 7571429000713324556),
         name: 'joke',
         type: 9,
         flags: 0,
       ),
       obx_int.ModelProperty(
-        id: const obx_int.IdUid(4, 4815179238963897465),
+        id: const obx_int.IdUid(4, 2570658070741351961),
         name: 'category',
         type: 9,
         flags: 0,
@@ -98,18 +98,13 @@ obx_int.ModelDefinition getObjectBoxModel() {
     // Typically, this is done with `dart run build_runner build`.
     generatorVersion: obx_int.GeneratorVersion.v2025_12_16,
     entities: _entities,
-    lastEntityId: const obx_int.IdUid(3, 4422683328380808790),
+    lastEntityId: const obx_int.IdUid(1, 1748776936864259395),
     lastIndexId: const obx_int.IdUid(0, 0),
     lastRelationId: const obx_int.IdUid(0, 0),
     lastSequenceId: const obx_int.IdUid(0, 0),
-    retiredEntityUids: const [678327579001484540, 4422683328380808790],
+    retiredEntityUids: const [],
     retiredIndexUids: const [],
-    retiredPropertyUids: const [
-      6588954402889459668,
-      4936159132159068576,
-      4350837279348532896,
-      1548782227158929985,
-    ],
+    retiredPropertyUids: const [],
     retiredRelationUids: const [],
     modelVersion: 5,
     modelVersionParserMinimum: 5,
