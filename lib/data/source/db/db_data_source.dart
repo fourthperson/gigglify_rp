@@ -1,8 +1,9 @@
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
+import 'package:gigglify_rp/data/source/db/objectbox.g.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
-import 'package:gigglify_rp/objectbox.g.dart';
 
 import 'package:gigglify_rp/data/source/db/gig_db.dart';
+import 'package:injectable/injectable.dart' hide Order;
 import 'package:logger/logger.dart';
 
 abstract class DatabaseDataSource {
@@ -11,11 +12,13 @@ abstract class DatabaseDataSource {
   Future<List<SavedJoke>> getSavedJokes();
 }
 
+@LazySingleton(as: DatabaseDataSource)
 class DatabaseDataSourceImpl extends DatabaseDataSource {
   final GigDb _gigDb;
   final Logger? logger;
 
-  DatabaseDataSourceImpl(this._gigDb, {this.logger});
+  DatabaseDataSourceImpl({required GigDb gigDb, required this.logger})
+    : _gigDb = gigDb;
 
   @override
   Future<List<SavedJoke>> getSavedJokes() async {

@@ -1,12 +1,18 @@
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/repository/choice_repository.dart';
 import 'package:gigglify_rp/domain/repository/joke_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@lazySingleton
 class GetJokeUseCase {
   final JokeRepository _jokeRepository;
   final ChoiceRepository _choiceRepository;
 
-  GetJokeUseCase(this._jokeRepository, this._choiceRepository);
+  GetJokeUseCase({
+    required JokeRepository jokeRepository,
+    required ChoiceRepository choiceRepository,
+  }) : _jokeRepository = jokeRepository,
+       _choiceRepository = choiceRepository;
 
   Future<Joke?> invoke() async {
     final String path = await _choiceRepository.getPath();

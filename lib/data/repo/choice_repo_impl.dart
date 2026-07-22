@@ -1,17 +1,19 @@
 import 'package:gigglify_rp/data/source/prefs/prefs_data_source.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
+import 'package:gigglify_rp/domain/entity/core/config.dart';
 import 'package:gigglify_rp/domain/repository/choice_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: ChoiceRepository)
 class ChoiceRepositoryImpl extends ChoiceRepository {
-  final List<String> _apiPaths;
-  final List<String> _blacklistCategories;
+  final AppConfig _config;
   final PrefsDataSource _prefsDataSource;
 
-  ChoiceRepositoryImpl(
-    this._apiPaths,
-    this._blacklistCategories,
-    this._prefsDataSource,
-  );
+  ChoiceRepositoryImpl({
+    required AppConfig config,
+    required PrefsDataSource prefsDataSource,
+  }) : _prefsDataSource = prefsDataSource,
+       _config = config;
 
   @override
   Future<Choice> getChoice() async {
@@ -36,35 +38,28 @@ class ChoiceRepositoryImpl extends ChoiceRepository {
       await setChoice(choice);
     }
 
-    if (_apiPaths.length != choice.choices.length) {
-      return _apiPaths[0];
+    if (_config.categories.length != choice.choices.length) {
+      return _config.categories[0];
     }
 
     // build comma-separated path from choices
-    StringBuffer buffer = StringBuffer();
-    for (int i = 0; i < _apiPaths.length; i++) {
+    final List<String> categories = [];
+    for (int i = 0; i < _config.categories.length; i++) {
       if (choice.choices[i]) {
-        buffer.write(_apiPaths[i]);
-        buffer.write(',');
+        categories.add(_config.categories[i]);
       }
     }
 
-    String path = buffer.toString();
-    path = path.substring(0, path.length - 1);
+    String path = categories.isEmpty
+        ? _config.categories[0]
+        : categories.join(',');
 
-    path = path.isEmpty ? _apiPaths[0] : path;
-
-    // build comma-separated blacklisted categories
-    buffer = StringBuffer();
-    final List<int> blacklisted = choice.blacklisted;
-    if (blacklisted.isNotEmpty) {
-      for (int i = 0; i < blacklisted.length; i++) {
-        buffer.write(_blacklistCategories[blacklisted[i]]);
-        if (i < blacklisted.length - 1) {
-          buffer.write(',');
-        }
+    if (choice.blacklisted.isNotEmpty) {
+      final List<String> blacklist = [];
+      for (int i = 0; i < choice.blacklisted.length; i++) {
+        blacklist.add(_config.blacklistable[choice.blacklisted[i]]);
       }
-      path = '$path?blacklistFlags=${buffer.toString()}';
+      path = '$path?blacklistFlags?=${blacklist.join(',')}';
     }
 
     return path;

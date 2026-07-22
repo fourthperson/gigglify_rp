@@ -27,7 +27,7 @@ You can set your preferred categories and blacklist some types of jokes. History
    layer repositories.
 3. `presentation` - the user facing layer. Has screens, navigation, riverpod providers, localization and theming
 
-- The clean architecture dependency declaration and injection is done in [di.dart](lib/di.dart)
+- The clean architecture dependency declaration and injection is done in [di.dart](lib/di2.dart)
   using [Get It](https://pub.dev/packages/get_it) (The service locator pattern)
 
 ## Data Flow

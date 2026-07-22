@@ -5,18 +5,22 @@ import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/repository/joke_repository.dart';
 
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@LazySingleton(as: JokeRepository)
 class JokeRepositoryImpl extends JokeRepository {
   final ApiDataSource _apiDataSource;
   final DatabaseDataSource _databaseDataSource;
-  final Logger? logger;
+  final Logger? _logger;
 
-  JokeRepositoryImpl(
-    this._apiDataSource,
-    this._databaseDataSource, {
-    this.logger,
-  });
+  JokeRepositoryImpl({
+    required ApiDataSource apiDataSource,
+    required DatabaseDataSource databaseDataSource,
+    required Logger? logger,
+  }) : _logger = logger,
+       _databaseDataSource = databaseDataSource,
+       _apiDataSource = apiDataSource;
 
   @override
   Future<Joke?> getJoke(String path) async {
@@ -41,7 +45,7 @@ class JokeRepositoryImpl extends JokeRepository {
         jokes.add(saved[i].toDomain());
       }
     } catch (e) {
-      logger?.log(Level.error, e);
+      _logger?.log(Level.error, e);
     }
     return jokes;
   }

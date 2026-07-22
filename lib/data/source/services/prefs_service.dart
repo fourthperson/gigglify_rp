@@ -4,9 +4,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PrefsService {
   final FlutterSecureStorage _secureStorage;
 
-  const PrefsService(this._secureStorage);
-
   static const String _hasRunBefore = 'hasRunBefore';
+
+  PrefsService({required FlutterSecureStorage secureStorage})
+    : _secureStorage = secureStorage;
 
   Future<void> clearOnReinstall() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
