@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/use_case/get_joke_use_case.dart';
 import 'package:gigglify_rp/domain/use_case/save_joke_use_case.dart';
-import 'package:gigglify_rp/main.dart';
 
 class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
   final GetJokeUseCase _getUseCase;

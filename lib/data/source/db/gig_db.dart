@@ -1,5 +1,5 @@
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
-import 'package:gigglify_rp/objectbox.g.dart';
+import 'package:gigglify_rp/data/source/db/objectbox.g.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

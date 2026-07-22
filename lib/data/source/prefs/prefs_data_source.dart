@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:gigglify_rp/data/source/services/prefs_service.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 abstract class PrefsDataSource {
@@ -14,14 +15,19 @@ abstract class PrefsDataSource {
   Future<void> setBlackList(List<int> blacklisted);
 }
 
+@LazySingleton(as: PrefsDataSource)
 class PrefsDataSourceImpl extends PrefsDataSource {
   final PrefsService _prefsService;
-  final Logger? logger;
+  final Logger? _logger;
 
   final String choiceKey = 'choices';
   final String blacklistKey = 'blacklist';
 
-  PrefsDataSourceImpl(this._prefsService, {this.logger});
+  PrefsDataSourceImpl({
+    required PrefsService prefsService,
+    required Logger? logger,
+  }) : _logger = logger,
+       _prefsService = prefsService;
 
   @override
   Future<List<bool>> getChoices() async {
@@ -44,13 +50,13 @@ class PrefsDataSourceImpl extends PrefsDataSource {
       await setChoices(choices);
     }
 
-    logger?.log(Level.info, 'getChoices: $choices');
+    _logger?.log(Level.info, 'getChoices: $choices');
     return choices;
   }
 
   @override
   Future<void> setChoices(List<bool> choices) async {
-    logger?.log(Level.info, 'setChoices: $choices');
+    _logger?.log(Level.info, 'setChoices: $choices');
     final String json = jsonEncode(choices);
     await _prefsService.setItem(choiceKey, json);
   }
@@ -65,13 +71,13 @@ class PrefsDataSourceImpl extends PrefsDataSource {
         blacklisted.add(int.tryParse(list[i].toString()) ?? 0);
       }
     }
-    logger?.log(Level.info, 'getBlacklist: $blacklisted');
+    _logger?.log(Level.info, 'getBlacklist: $blacklisted');
     return blacklisted;
   }
 
   @override
   Future<void> setBlackList(List<int> blacklisted) async {
-    logger?.log(Level.info, 'setBlackList: $blacklisted');
+    _logger?.log(Level.info, 'setBlackList: $blacklisted');
     final String json = jsonEncode(blacklisted);
     await _prefsService.setItem(blacklistKey, json);
   }

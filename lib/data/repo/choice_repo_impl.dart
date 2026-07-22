@@ -1,29 +1,31 @@
 import 'package:gigglify_rp/data/source/prefs/prefs_data_source.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
+import 'package:gigglify_rp/domain/entity/core/config.dart';
 import 'package:gigglify_rp/domain/repository/choice_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: ChoiceRepository)
 class ChoiceRepositoryImpl extends ChoiceRepository {
-  final List<String> apiPaths;
-  final List<String> blacklistCategories;
-  final PrefsDataSource prefsDataSource;
+  final AppConfig _config;
+  final PrefsDataSource _prefsDataSource;
 
   ChoiceRepositoryImpl({
-    required this.apiPaths,
-    required this.blacklistCategories,
-    required this.prefsDataSource,
-  });
+    required AppConfig config,
+    required PrefsDataSource prefsDataSource,
+  }) : _prefsDataSource = prefsDataSource,
+       _config = config;
 
   @override
   Future<Choice> getChoice() async {
-    final List<bool> choices = await prefsDataSource.getChoices();
-    final List<int> blacklist = await prefsDataSource.getBlacklist();
+    final List<bool> choices = await _prefsDataSource.getChoices();
+    final List<int> blacklist = await _prefsDataSource.getBlacklist();
     return Choice(choices: choices, blacklisted: blacklist);
   }
 
   @override
   Future<void> setChoice(Choice choice) async {
-    await prefsDataSource.setChoices(choice.choices);
-    await prefsDataSource.setBlackList(choice.blacklisted);
+    await _prefsDataSource.setChoices(choice.choices);
+    await _prefsDataSource.setBlackList(choice.blacklisted);
   }
 
   @override
@@ -36,24 +38,26 @@ class ChoiceRepositoryImpl extends ChoiceRepository {
       await setChoice(choice);
     }
 
-    if (apiPaths.length != choice.choices.length) {
-      return apiPaths[0];
+    if (_config.categories.length != choice.choices.length) {
+      return _config.categories[0];
     }
 
     // build comma-separated path from choices
     final List<String> categories = [];
-    for (int i = 0; i < apiPaths.length; i++) {
+    for (int i = 0; i < _config.categories.length; i++) {
       if (choice.choices[i]) {
-        categories.add(apiPaths[i]);
+        categories.add(_config.categories[i]);
       }
     }
 
-    String path = categories.isEmpty ? apiPaths[0] : categories.join(',');
+    String path = categories.isEmpty
+        ? _config.categories[0]
+        : categories.join(',');
 
     if (choice.blacklisted.isNotEmpty) {
       final List<String> blacklist = [];
       for (int i = 0; i < choice.blacklisted.length; i++) {
-        blacklist.add(blacklistCategories[choice.blacklisted[i]]);
+        blacklist.add(_config.blacklistable[choice.blacklisted[i]]);
       }
       path = '$path?blacklistFlags?=${blacklist.join(',')}';
     }

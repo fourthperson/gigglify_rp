@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
+@lazySingleton
 class RestService {
   final Dio _dio;
-  final Logger? logger;
+  final Logger? _logger;
 
-  const RestService(this._dio, {this.logger});
+  RestService({required Dio dio, required Logger? logger})
+    : _dio = dio,
+      _logger = logger;
 
   Future<String?> get({required String path}) async {
     try {
@@ -14,7 +18,7 @@ class RestService {
         return response.data.toString();
       }
     } catch (e) {
-      logger?.log(Level.error, e);
+      _logger?.log(Level.error, e);
     }
     return null;
   }

@@ -2,7 +2,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
-import 'package:gigglify_rp/env.dart';
+import 'package:gigglify_rp/data/source/db/gig_db.dart';
+import 'package:gigglify_rp/data/source/services/prefs_service.dart';
+import 'package:gigglify_rp/domain/entity/core/config.dart';
+import 'package:gigglify_rp/domain/entity/core/env.dart';
 import 'package:injectable/injectable.dart';
 import 'package:gigglify_rp/di.config.dart';
 import 'package:logger/logger.dart';
@@ -10,7 +13,7 @@ import 'package:logger/logger.dart';
 final GetIt locator = GetIt.instance;
 
 @InjectableInit()
-void configureDependencies() => locator.init();
+Future<void> configureDependencies() async => await locator.init();
 
 @module
 abstract class GigglifyModule {
@@ -20,9 +23,25 @@ abstract class GigglifyModule {
   @lazySingleton
   FlutterSecureStorage get flutterSecureStorage => FlutterSecureStorage();
 
-  // @preResolve
-  // @lazySingleton
-  // Future<GigDb> get gigDb => await GigDb.create();
+  @preResolve
+  @lazySingleton
+  Future<GigDb> gigDb() => GigDb.create();
+
+  @preResolve
+  @lazySingleton
+  Future<PrefsService> prefsService() async {
+    final PrefsService prefsService = PrefsService(
+      secureStorage: flutterSecureStorage,
+    );
+    await prefsService.clearOnReinstall();
+    return prefsService;
+  }
+
+  @singleton
+  AppConfig get config => AppConfig(
+    categories: Env.apiPaths.split(' '),
+    blacklistable: Env.apiPaths.split(' '),
+  );
 
   @lazySingleton
   Dio dio() {

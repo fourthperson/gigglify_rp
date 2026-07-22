@@ -8,7 +8,7 @@ import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/history_provider.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:intl/intl.dart';
-import 'package:ionicons/ionicons.dart';
+import 'package:ionicons_plus/ionicons_plus.dart';
 import 'package:share_plus/share_plus.dart';
 
 class HistoryModal extends ConsumerStatefulWidget {

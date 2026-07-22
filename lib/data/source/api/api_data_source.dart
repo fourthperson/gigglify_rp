@@ -2,17 +2,21 @@ import 'dart:convert';
 
 import 'package:gigglify_rp/data/entity/api/joke_response.dart';
 import 'package:gigglify_rp/data/source/services/rest_service.dart';
+import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 
 abstract class ApiDataSource {
   Future<JokeResponseModel?> getJoke(String path);
 }
 
+@LazySingleton(as: ApiDataSource)
 class ApiDataSourceImpl extends ApiDataSource {
   final RestService _restService;
-  final Logger? logger;
+  final Logger? _logger;
 
-  ApiDataSourceImpl(this._restService, {this.logger});
+  ApiDataSourceImpl({required RestService restService, required Logger? logger})
+    : _restService = restService,
+      _logger = logger;
 
   @override
   Future<JokeResponseModel?> getJoke(String path) async {
@@ -29,7 +33,7 @@ class ApiDataSourceImpl extends ApiDataSource {
         return model;
       }
     } catch (e) {
-      logger?.log(Level.error, e);
+      _logger?.log(Level.error, e);
     }
     return null;
   }

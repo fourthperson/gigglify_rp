@@ -9,9 +9,9 @@ import 'package:gigglify_rp/presentation/providers/joke_provider.dart';
 import 'package:gigglify_rp/presentation/screens/modal/history.dart';
 import 'package:gigglify_rp/presentation/screens/modal/preferences.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
-import 'package:ionicons/ionicons.dart';
 
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
+import 'package:ionicons_plus/ionicons_plus.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
