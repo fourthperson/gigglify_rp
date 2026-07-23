@@ -45,7 +45,7 @@ class JokeRepositoryImpl extends JokeRepository {
         jokes.add(saved[i].toDomain());
       }
     } catch (e) {
-      _logger?.log(Level.error, e);
+      _logger?.e(e);
     }
     return jokes;
   }

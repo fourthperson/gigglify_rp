@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
 import 'package:gigglify_rp/data/source/db/objectbox.g.dart';
 import 'package:path/path.dart' as p;
@@ -13,8 +15,10 @@ class GigDb {
   }
 
   static Future<GigDb> create() async {
-    final docsDir = await getApplicationDocumentsDirectory();
-    final store = await openStore(directory: p.join(docsDir.path, 'dig_db'));
+    final Directory docsDir = await getApplicationDocumentsDirectory();
+    final Store store = await openStore(
+      directory: p.join(docsDir.path, 'gig_db'),
+    );
     return GigDb._create(store);
   }
 }

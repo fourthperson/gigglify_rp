@@ -18,7 +18,7 @@ class RestService {
         return response.data.toString();
       }
     } catch (e) {
-      _logger?.log(Level.error, e);
+      _logger?.e(e);
     }
     return null;
   }

@@ -22,18 +22,16 @@ class ApiDataSourceImpl extends ApiDataSource {
   Future<JokeResponseModel?> getJoke(String path) async {
     try {
       final String? json = await _restService.get(path: path);
-
       if (json == null) return null;
 
       final JokeResponseModel model = JokeResponseModel.fromJson(
         jsonDecode(json),
       );
+      if (model.error) return null;
 
-      if (!model.error) {
-        return model;
-      }
+      return model;
     } catch (e) {
-      _logger?.log(Level.error, e);
+      _logger?.e(e);
     }
     return null;
   }

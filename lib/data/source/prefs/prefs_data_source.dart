@@ -31,54 +31,71 @@ class PrefsDataSourceImpl extends PrefsDataSource {
 
   @override
   Future<List<bool>> getChoices() async {
-    final String? json = await _prefsService.getItem(choiceKey);
-    List<bool> choices = [];
-    if (json != null && json.isNotEmpty) {
-      final List<dynamic> list = jsonDecode(json) as List;
-      for (int i = 0; i < list.length; i++) {
-        choices.add(bool.tryParse(list[i].toString()) ?? false);
+    try {
+      final String? json = await _prefsService.getItem(choiceKey);
+      List<bool> choices = [];
+      if (json != null && json.isNotEmpty) {
+        final List<dynamic> list = jsonDecode(json) as List;
+        for (int i = 0; i < list.length; i++) {
+          choices.add(bool.tryParse(list[i].toString()) ?? false);
+        }
+        return choices;
+      } else {
+        choices = Choice.defaultChoice().choices;
+        await setChoices(choices);
       }
+
+      final bool allFalse = choices.where((c) => c == true).isEmpty;
+      if (allFalse) {
+        choices = Choice.defaultChoice().choices;
+        await setChoices(choices);
+      }
+      _logger?.i('getChoices: $choices');
       return choices;
-    } else {
-      choices = Choice.defaultChoice().choices;
-      await setChoices(choices);
+    } catch (e) {
+      _logger?.e(e);
+      return [];
     }
-
-    final bool allFalse = choices.where((c) => c == true).isEmpty;
-    if (allFalse) {
-      choices = Choice.defaultChoice().choices;
-      await setChoices(choices);
-    }
-
-    _logger?.log(Level.info, 'getChoices: $choices');
-    return choices;
   }
 
   @override
   Future<void> setChoices(List<bool> choices) async {
-    _logger?.log(Level.info, 'setChoices: $choices');
-    final String json = jsonEncode(choices);
-    await _prefsService.setItem(choiceKey, json);
+    try {
+      _logger?.i('setChoices: $choices');
+      final String json = jsonEncode(choices);
+      await _prefsService.setItem(choiceKey, json);
+    } catch (e) {
+      _logger?.e(e);
+    }
   }
 
   @override
   Future<List<int>> getBlacklist() async {
-    final String? json = await _prefsService.getItem(blacklistKey);
-    final List<int> blacklisted = [];
-    if (json != null && json.isNotEmpty) {
-      final List<dynamic> list = jsonDecode(json) as List<dynamic>;
-      for (int i = 0; i < list.length; i++) {
-        blacklisted.add(int.tryParse(list[i].toString()) ?? 0);
+    try {
+      final String? json = await _prefsService.getItem(blacklistKey);
+      final List<int> blacklisted = [];
+      if (json != null && json.isNotEmpty) {
+        final List<dynamic> list = jsonDecode(json) as List<dynamic>;
+        for (int i = 0; i < list.length; i++) {
+          blacklisted.add(int.tryParse(list[i].toString()) ?? 0);
+        }
       }
+      _logger?.i('getBlacklist: $blacklisted');
+      return blacklisted;
+    } catch (e) {
+      _logger?.e(e);
+      return [];
     }
-    _logger?.log(Level.info, 'getBlacklist: $blacklisted');
-    return blacklisted;
   }
 
   @override
   Future<void> setBlackList(List<int> blacklisted) async {
-    _logger?.log(Level.info, 'setBlackList: $blacklisted');
-    final String json = jsonEncode(blacklisted);
-    await _prefsService.setItem(blacklistKey, json);
+    try {
+      _logger?.i('setBlackList: $blacklisted');
+      final String json = jsonEncode(blacklisted);
+      await _prefsService.setItem(blacklistKey, json);
+    } catch (e) {
+      _logger?.e(e);
+    }
   }
 }
