@@ -8,7 +8,6 @@ import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/choice_provider.dart';
 import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
-import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
 
 class PreferenceModal extends ConsumerStatefulWidget {
@@ -46,6 +45,7 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final AsyncValue<Choice> asyncChoices = ref.watch(choiceNotifier);
     final GigThemeMode mode = ref.watch(themeProvider);
@@ -56,8 +56,8 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
           height: 150,
           child: Center(
             child: Platform.isIOS
-                ? CupertinoActivityIndicator()
-                : CircularProgressIndicator(),
+                ? CupertinoActivityIndicator(color: theme.colorScheme.primary)
+                : CircularProgressIndicator(color: theme.colorScheme.primary),
           ),
         ),
       );
@@ -76,12 +76,12 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
               Text(
                 strings.preferences,
                 textAlign: TextAlign.center,
-                style: textRegular.copyWith(fontSize: 20),
+                style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
               ),
               const SizedBox(height: 10),
               Text(
                 strings.allowed_categories,
-                style: textBold.copyWith(fontSize: 16),
+                style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
               ListView.builder(
@@ -108,7 +108,7 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
               const SizedBox(height: 10),
               Text(
                 strings.blacklisted_categories,
-                style: textBold.copyWith(fontSize: 16),
+                style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
               ListView.builder(
@@ -133,7 +133,7 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                   );
                 },
               ),
-              Text(strings.title_theme, style: textBold.copyWith(fontSize: 16)),
+              Text(strings.title_theme, style: theme.textTheme.titleMedium),
               const SizedBox(height: 10),
               _CategoryItem(
                 checked: mode == GigThemeMode.system,
@@ -165,8 +165,8 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                         Ionicons.sunny_outline,
                         size: 36,
                         color: mode == GigThemeMode.light
-                            ? Colors.purple
-                            : Colors.black12,
+                            ? theme.colorScheme.secondary
+                            : theme.iconTheme.color?.withValues(alpha: 0.3),
                       ),
                     ),
                     IconButton(
@@ -180,8 +180,8 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                         Ionicons.moon_outline,
                         size: 36,
                         color: mode == GigThemeMode.dark
-                            ? Colors.purple
-                            : Colors.black12,
+                            ? theme.colorScheme.secondary
+                            : theme.iconTheme.color?.withValues(alpha: 0.3),
                       ),
                     ),
                   ],
@@ -258,23 +258,25 @@ class _CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return ListTile(
       dense: true,
       onTap: () => onTap(!checked),
       contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity(vertical: -4),
+      visualDensity: const VisualDensity(vertical: -4),
       leading: Platform.isIOS
           ? CupertinoCheckbox(
               value: checked,
               onChanged: (c) => onTap(c ?? false),
-              activeColor: Colors.purple,
+              activeColor: theme.colorScheme.secondary,
             )
           : Checkbox(
               value: checked,
               onChanged: (c) => onTap(c ?? false),
-              activeColor: Colors.purple,
+              activeColor: theme.colorScheme.secondary,
             ),
-      title: Text(label, style: textRegular),
+      title: Text(label, style: theme.textTheme.bodyLarge),
     );
   }
 }
