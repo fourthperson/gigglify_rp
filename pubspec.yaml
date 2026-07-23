@@ -1,6 +1,6 @@
 name: gigglify_rp
 description: "A new Flutter project."
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: 'none'
 version: 1.0.0+1
 
 environment:
@@ -28,11 +28,11 @@ dependencies:
   objectbox_flutter_libs: any
   path: ^1.9.1
   path_provider: ^2.1.5
-  share_plus: ^12.0.1
+  share_plus: ^13.2.1
   shared_preferences: ^2.5.4
 
   cupertino_icons: ^1.0.8
-  google_fonts: ^6.3.3
+  google_fonts: ^8.2.0
   ionicons_plus: ^0.2.5
   modal_bottom_sheet: ^3.0.0
 
@@ -48,8 +48,8 @@ dev_dependencies:
   injectable_generator: ^2.9.1
   json_serializable: ^6.11.2
   objectbox_generator: any
-  riverpod_annotation: ^3.0.3
-  riverpod_generator: ^3.0.3
+  riverpod_annotation: ^4.0.2
+  riverpod_generator: ^4.0.3
 
 flutter:
   assets:
@@ -62,5 +62,4 @@ flutter_intl:
   output_dir: lib/presentation/l10n/generated
 
 objectbox:
-  # Generates objectbox.g.dart and objectbox-model.json in lib/output_dir
   output_dir: data/source/db
