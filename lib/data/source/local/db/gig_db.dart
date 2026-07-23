@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
+import 'package:gigglify_rp/data/model/db/saved_joke.dart';
 import 'package:gigglify_rp/data/source/local/db/objectbox.g.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';

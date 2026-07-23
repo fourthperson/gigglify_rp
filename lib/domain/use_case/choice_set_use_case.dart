@@ -3,13 +3,13 @@ import 'package:gigglify_rp/domain/repository/choice_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
-class GetChoiceUseCase {
+class ChoiceSetUseCase {
   final ChoiceRepository _choiceRepository;
 
-  GetChoiceUseCase({required ChoiceRepository choiceRepository})
+  ChoiceSetUseCase({required ChoiceRepository choiceRepository})
     : _choiceRepository = choiceRepository;
 
-  Future<Choice> invoke() async {
-    return await _choiceRepository.getChoice();
+  Future<void> invoke(Choice choices) async {
+    await _choiceRepository.setChoice(choices);
   }
 }

@@ -4,11 +4,11 @@ import 'package:gigglify_rp/domain/repository/joke_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
-class GetJokeUseCase {
+class JokeGetUseCase {
   final JokeRepository _jokeRepository;
   final ChoiceRepository _choiceRepository;
 
-  GetJokeUseCase({
+  JokeGetUseCase({
     required JokeRepository jokeRepository,
     required ChoiceRepository choiceRepository,
   }) : _jokeRepository = jokeRepository,
