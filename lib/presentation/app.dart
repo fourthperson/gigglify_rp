@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/navigation/route_handler.dart';
-import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
+import 'package:gigglify_rp/presentation/providers/theme_notifier.dart'; // Import the updated theme_notifier
 import 'package:gigglify_rp/presentation/theme/theme.dart';
 
 class GiglifyApp extends ConsumerStatefulWidget {
@@ -27,8 +26,8 @@ class _GiglifyAppState extends ConsumerState<GiglifyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final GigThemeMode mode = ref.watch(themeProvider);
-    final ThemeMode themeMode = _mode(mode);
+    // Watch the resolvedThemeProvider which gives the final ThemeMode
+    final ThemeMode themeMode = ref.watch(resolvedThemeProvider);
 
     return MaterialApp.router(
       routerConfig: _router.config(),
@@ -44,21 +43,5 @@ class _GiglifyAppState extends ConsumerState<GiglifyApp> {
       darkTheme: darkTheme,
       themeMode: themeMode,
     );
-  }
-
-  ThemeMode _mode(GigThemeMode mode) {
-    ThemeMode themeMode;
-    switch (mode) {
-      case GigThemeMode.light:
-        themeMode = ThemeMode.light;
-        break;
-      case GigThemeMode.dark:
-        themeMode = ThemeMode.dark;
-        break;
-      case GigThemeMode.system:
-        themeMode = ThemeMode.system;
-        break;
-    }
-    return themeMode;
   }
 }
