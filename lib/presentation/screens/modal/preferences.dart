@@ -4,9 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
+import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/choice_provider.dart';
+import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
+import 'package:ionicons_plus/ionicons_plus.dart';
 
 class PreferenceModal extends ConsumerStatefulWidget {
   const PreferenceModal({super.key});
@@ -45,6 +48,7 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
     final S strings = S.of(context);
 
     final AsyncValue<Choice> asyncChoices = ref.watch(choiceNotifier);
+    final GigThemeMode mode = ref.watch(themeProvider);
 
     if (asyncChoices.isLoading || asyncChoices.isRefreshing) {
       return SafeArea(
@@ -129,6 +133,60 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                   );
                 },
               ),
+              Text(strings.title_theme, style: textBold.copyWith(fontSize: 16)),
+              const SizedBox(height: 10),
+              _CategoryItem(
+                checked: mode == GigThemeMode.system,
+                label: strings.follow_system_theme,
+                onTap: (bool enabled) {
+                  if (mode == GigThemeMode.system) {
+                    ref
+                        .read(themeProvider.notifier)
+                        .setTheme(GigThemeMode.light);
+                  } else {
+                    ref
+                        .read(themeProvider.notifier)
+                        .setTheme(GigThemeMode.system);
+                  }
+                },
+              ),
+              if (mode != GigThemeMode.system) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (mode == GigThemeMode.light) return;
+                        ref
+                            .read(themeProvider.notifier)
+                            .setTheme(GigThemeMode.light);
+                      },
+                      icon: Icon(
+                        Ionicons.sunny_outline,
+                        size: 36,
+                        color: mode == GigThemeMode.light
+                            ? Colors.purple
+                            : Colors.black12,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (mode == GigThemeMode.dark) return;
+                        ref
+                            .read(themeProvider.notifier)
+                            .setTheme(GigThemeMode.dark);
+                      },
+                      icon: Icon(
+                        Ionicons.moon_outline,
+                        size: 36,
+                        color: mode == GigThemeMode.dark
+                            ? Colors.purple
+                            : Colors.black12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),

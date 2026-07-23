@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/presentation/providers/joke_provider.dart';
+import 'package:gigglify_rp/presentation/screens/modal/brightness.dart';
 import 'package:gigglify_rp/presentation/screens/modal/history.dart';
 import 'package:gigglify_rp/presentation/screens/modal/preferences.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
@@ -96,7 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _ActionButton(
-                        iconData: Ionicons.settings_outline,
+                        iconData: Icons.category_outlined,
                         onTap: () => _modal(const PreferenceModal()),
                       ),
                       _ActionButton(
@@ -108,8 +109,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         ),
                       ),
                       _ActionButton(
-                        iconData: Ionicons.time_outline,
+                        iconData: Icons.history_outlined,
                         onTap: () => _modal(const HistoryModal()),
+                      ),
+                      _ActionButton(
+                        iconData: Icons.settings_brightness_outlined,
+                        onTap: () => _modal(const BrightnessModal()),
+                        iconSize: 24,
+                        color: Colors.purple,
                       ),
                     ],
                   ),
