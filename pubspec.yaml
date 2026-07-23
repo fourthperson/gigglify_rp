@@ -68,12 +68,12 @@ flutter_intl:
   output_dir: lib/presentation/l10n/generated
 
 flutter_native_splash: # dart run flutter_native_splash:create
-  color: "#15022D"
+  color: "#ffffff"
   color_dark: "#15022D"
   image: assets/image/logo.png
   image_dark: assets/image/logo.png
   android_12:
-    color: "#15022D"
+    color: "#ffffff"
     color_dark: "#15022D"
     image: assets/image/logo.png
     image_dark: assets/image/logo.png
