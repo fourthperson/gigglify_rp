@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/history_provider.dart';
-import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
 import 'package:share_plus/share_plus.dart';
@@ -30,6 +29,7 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
+    final ThemeData theme = Theme.of(context);
 
     dateFormat = _loadDateFormat(context);
 
@@ -41,8 +41,8 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
           height: 150,
           child: Center(
             child: Platform.isIOS
-                ? CupertinoActivityIndicator()
-                : CircularProgressIndicator(),
+                ? CupertinoActivityIndicator(color: theme.colorScheme.primary)
+                : CircularProgressIndicator(color: theme.colorScheme.primary),
           ),
         ),
       );
@@ -52,7 +52,7 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
       return SafeArea(
         child: _Info(
           iconData: Ionicons.warning_outline,
-          iconColor: Colors.red,
+          iconColor: theme.colorScheme.error,
           message: strings.history_error,
         ),
       );
@@ -62,7 +62,7 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
       return SafeArea(
         child: _Info(
           iconData: Ionicons.cube_outline,
-          iconColor: Colors.black,
+          iconColor: theme.iconTheme.color,
           message: strings.history_empty,
         ),
       );
@@ -80,7 +80,7 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
               Center(
                 child: Text(
                   strings.history,
-                  style: textBold.copyWith(fontSize: 20),
+                  style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
                 ),
               ),
               const SizedBox(height: 10),
@@ -119,25 +119,22 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
 
 class _Info extends StatelessWidget {
   final IconData iconData;
-  final Color iconColor;
+  final Color? iconColor;
   final String message;
 
-  const _Info({
-    required this.iconData,
-    required this.iconColor,
-    required this.message,
-  });
+  const _Info({required this.iconData, required this.message, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return SizedBox(
       height: 150,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(iconData, color: iconColor),
-            Text(message, style: textRegular.copyWith(fontSize: 16)),
+            Icon(iconData, color: iconColor ?? theme.iconTheme.color),
+            Text(message, style: theme.textTheme.bodyLarge),
           ],
         ),
       ),
@@ -158,6 +155,8 @@ class _HistoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return InkWell(
       onTap: onTap,
       child: Padding(
@@ -165,12 +164,12 @@ class _HistoryItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(joke.content, style: textMedium.copyWith(fontSize: 16)),
+            Text(joke.content, style: theme.textTheme.bodyMedium),
             Row(
               children: [
                 Text(
                   joke.category.toUpperCase(),
-                  style: textLight.copyWith(fontSize: 12),
+                  style: theme.textTheme.bodySmall,
                 ),
                 const Spacer(),
                 Text(
@@ -179,7 +178,7 @@ class _HistoryItem extends StatelessWidget {
                       : dateFormat!.format(
                           DateTime.fromMillisecondsSinceEpoch(joke.time),
                         ),
-                  style: textRegular.copyWith(fontSize: 12),
+                  style: theme.textTheme.bodySmall,
                 ),
               ],
             ),

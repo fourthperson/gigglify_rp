@@ -40,7 +40,7 @@ abstract class GigglifyModule {
   @singleton
   AppConfig get config => AppConfig(
     categories: Env.apiPaths.split(' '),
-    blacklistable: Env.apiPaths.split(' '),
+    blacklistable: Env.blacklistCategories.split(' '),
   );
 
   @lazySingleton

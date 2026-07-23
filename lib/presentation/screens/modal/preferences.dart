@@ -4,9 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
+import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/choice_provider.dart';
-import 'package:gigglify_rp/presentation/theme/theme.dart';
+import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
+import 'package:ionicons_plus/ionicons_plus.dart';
 
 class PreferenceModal extends ConsumerStatefulWidget {
   const PreferenceModal({super.key});
@@ -43,8 +45,10 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final AsyncValue<Choice> asyncChoices = ref.watch(choiceNotifier);
+    final GigThemeMode mode = ref.watch(themeProvider);
 
     if (asyncChoices.isLoading || asyncChoices.isRefreshing) {
       return SafeArea(
@@ -52,8 +56,8 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
           height: 150,
           child: Center(
             child: Platform.isIOS
-                ? CupertinoActivityIndicator()
-                : CircularProgressIndicator(),
+                ? CupertinoActivityIndicator(color: theme.colorScheme.primary)
+                : CircularProgressIndicator(color: theme.colorScheme.primary),
           ),
         ),
       );
@@ -72,12 +76,12 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
               Text(
                 strings.preferences,
                 textAlign: TextAlign.center,
-                style: textRegular.copyWith(fontSize: 20),
+                style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
               ),
               const SizedBox(height: 10),
               Text(
                 strings.allowed_categories,
-                style: textBold.copyWith(fontSize: 16),
+                style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
               ListView.builder(
@@ -104,7 +108,7 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
               const SizedBox(height: 10),
               Text(
                 strings.blacklisted_categories,
-                style: textBold.copyWith(fontSize: 16),
+                style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 10),
               ListView.builder(
@@ -129,6 +133,60 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                   );
                 },
               ),
+              Text(strings.title_theme, style: theme.textTheme.titleMedium),
+              const SizedBox(height: 10),
+              _CategoryItem(
+                checked: mode == GigThemeMode.system,
+                label: strings.follow_system_theme,
+                onTap: (bool enabled) {
+                  if (mode == GigThemeMode.system) {
+                    ref
+                        .read(themeProvider.notifier)
+                        .setTheme(GigThemeMode.light);
+                  } else {
+                    ref
+                        .read(themeProvider.notifier)
+                        .setTheme(GigThemeMode.system);
+                  }
+                },
+              ),
+              if (mode != GigThemeMode.system) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        if (mode == GigThemeMode.light) return;
+                        ref
+                            .read(themeProvider.notifier)
+                            .setTheme(GigThemeMode.light);
+                      },
+                      icon: Icon(
+                        Ionicons.sunny_outline,
+                        size: 36,
+                        color: mode == GigThemeMode.light
+                            ? theme.colorScheme.secondary
+                            : theme.iconTheme.color?.withValues(alpha: 0.3),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        if (mode == GigThemeMode.dark) return;
+                        ref
+                            .read(themeProvider.notifier)
+                            .setTheme(GigThemeMode.dark);
+                      },
+                      icon: Icon(
+                        Ionicons.moon_outline,
+                        size: 36,
+                        color: mode == GigThemeMode.dark
+                            ? theme.colorScheme.secondary
+                            : theme.iconTheme.color?.withValues(alpha: 0.3),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
@@ -200,23 +258,25 @@ class _CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+
     return ListTile(
       dense: true,
       onTap: () => onTap(!checked),
       contentPadding: EdgeInsets.zero,
-      visualDensity: VisualDensity(vertical: -4),
+      visualDensity: const VisualDensity(vertical: -4),
       leading: Platform.isIOS
           ? CupertinoCheckbox(
               value: checked,
               onChanged: (c) => onTap(c ?? false),
-              activeColor: Colors.purple,
+              activeColor: theme.colorScheme.secondary,
             )
           : Checkbox(
               value: checked,
               onChanged: (c) => onTap(c ?? false),
-              activeColor: Colors.purple,
+              activeColor: theme.colorScheme.secondary,
             ),
-      title: Text(label, style: textRegular),
+      title: Text(label, style: theme.textTheme.bodyLarge),
     );
   }
 }

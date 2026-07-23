@@ -13,6 +13,10 @@ abstract class PrefsDataSource {
   Future<List<int>> getBlacklist();
 
   Future<void> setBlackList(List<int> blacklisted);
+
+  Future<void> setTheme(String theme);
+
+  Future<String> getTheme();
 }
 
 @LazySingleton(as: PrefsDataSource)
@@ -22,6 +26,7 @@ class PrefsDataSourceImpl extends PrefsDataSource {
 
   final String choiceKey = 'choices';
   final String blacklistKey = 'blacklist';
+  final String themeKey = 'theme';
 
   PrefsDataSourceImpl({
     required PrefsService prefsService,
@@ -94,6 +99,30 @@ class PrefsDataSourceImpl extends PrefsDataSource {
       _logger?.i('setBlackList: $blacklisted');
       final String json = jsonEncode(blacklisted);
       await _prefsService.setItem(blacklistKey, json);
+    } catch (e) {
+      _logger?.e(e);
+    }
+  }
+
+  @override
+  Future<String> getTheme() async {
+    try {
+      final String? theme = await _prefsService.getItem(themeKey);
+      _logger?.i('getTheme: $theme');
+      if (theme != null && theme.isNotEmpty) {
+        return theme;
+      }
+    } catch (e) {
+      _logger?.e(e);
+    }
+    return 'system';
+  }
+
+  @override
+  Future<void> setTheme(String theme) async {
+    try {
+      _logger?.i('setTheme: $theme');
+      await _prefsService.setItem(themeKey, theme);
     } catch (e) {
       _logger?.e(e);
     }

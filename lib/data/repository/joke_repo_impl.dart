@@ -1,10 +1,10 @@
-import 'package:gigglify_rp/data/entity/api/joke_response.dart';
+import 'package:gigglify_rp/data/model/api/joke_response.dart';
+import 'package:gigglify_rp/data/model/db/saved_joke.dart';
 import 'package:gigglify_rp/data/source/local/db/db_data_source.dart';
 import 'package:gigglify_rp/data/source/remote/api/api_data_source.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/repository/joke_repository.dart';
 
-import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 

@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/presentation/providers/joke_provider.dart';
+import 'package:gigglify_rp/presentation/screens/modal/brightness.dart';
 import 'package:gigglify_rp/presentation/screens/modal/history.dart';
 import 'package:gigglify_rp/presentation/screens/modal/preferences.dart';
-import 'package:gigglify_rp/presentation/theme/theme.dart';
 
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
@@ -33,6 +33,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
+    final ThemeData theme = Theme.of(context);
 
     final AsyncValue<Joke?> asyncJoke = ref.watch(jokeProvider);
 
@@ -40,8 +41,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       return Scaffold(
         body: Center(
           child: Platform.isIOS
-              ? CupertinoActivityIndicator()
-              : CircularProgressIndicator(),
+              ? CupertinoActivityIndicator(color: theme.colorScheme.primary)
+              : CircularProgressIndicator(color: theme.colorScheme.primary),
         ),
       );
     }
@@ -54,7 +55,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Center(
             child: Text(
               strings.usage_description1,
-              style: textBold.copyWith(fontSize: 16),
+              style: theme.textTheme.bodyLarge,
             ),
           ),
         ),
@@ -75,7 +76,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Center(
                   child: Text(
                     asyncJoke.value?.category ?? '',
-                    style: textBold.copyWith(fontSize: 18),
+                    style: theme.textTheme.titleLarge,
                   ),
                 ),
                 Expanded(
@@ -85,7 +86,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Text(
                         asyncJoke.value?.content ?? '',
                         textAlign: TextAlign.center,
-                        style: textMedium.copyWith(fontSize: 18),
+                        style: theme.textTheme.bodyMedium,
                       ),
                     ],
                   ),
@@ -96,20 +97,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       _ActionButton(
-                        iconData: Ionicons.settings_outline,
-                        onTap: () => _modal(const PreferenceModal()),
+                        iconData: Icons.category_outlined,
+                        onTap: () => _showModal((_) => const PreferenceModal()),
+                        color: theme.iconTheme.color,
                       ),
                       _ActionButton(
                         iconData: Ionicons.share_social_outline,
                         iconSize: 42,
-                        color: Colors.purple,
+                        color: theme.colorScheme.secondary,
                         onTap: () => SharePlus.instance.share(
                           ShareParams(text: asyncJoke.value?.content ?? ''),
                         ),
                       ),
                       _ActionButton(
-                        iconData: Ionicons.time_outline,
-                        onTap: () => _modal(const HistoryModal()),
+                        iconData: Icons.history_outlined,
+                        onTap: () => _showModal((_) => const HistoryModal()),
+                        color: theme.iconTheme.color,
+                      ),
+                      _ActionButton(
+                        iconData: Icons.settings_brightness_outlined,
+                        onTap: () => _showModal((_) => const BrightnessModal()),
+                        iconSize: 24,
+                        color: theme.colorScheme.secondary,
                       ),
                     ],
                   ),
@@ -118,7 +127,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Center(
                   child: Text(
                     strings.usage_description,
-                    style: textLight.copyWith(fontSize: 10),
+                    style: theme.textTheme.bodySmall,
                   ),
                 ),
               ],
@@ -131,12 +140,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   void _loadJoke() => ref.read(jokeProvider.notifier).fetchJoke();
 
-  void _modal(Widget content) {
-    content = Material(child: content);
+  void _showModal(WidgetBuilder builder) {
     if (Platform.isIOS) {
-      showCupertinoModalBottomSheet(context: context, builder: (_) => content);
+      showCupertinoModalBottomSheet(
+        context: context,
+        builder: (context) => Material(child: builder(context)),
+      );
     } else {
-      showMaterialModalBottomSheet(context: context, builder: (_) => content);
+      showMaterialModalBottomSheet(
+        context: context,
+        builder: (context) => Material(child: builder(context)),
+      );
     }
   }
 }
@@ -144,24 +158,29 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 class _ActionButton extends StatelessWidget {
   final IconData iconData;
   final double iconSize;
-  final Color color;
+  final Color? color;
   final Function() onTap;
 
   const _ActionButton({
     required this.iconData,
     required this.onTap,
     this.iconSize = 32,
-    this.color = Colors.black,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return InkWell(
       onTap: onTap,
       customBorder: const CircleBorder(),
       child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Icon(iconData, size: iconSize, color: color),
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          iconData,
+          size: iconSize,
+          color: color ?? theme.iconTheme.color,
+        ),
       ),
     );
   }
