@@ -26,7 +26,6 @@ class _GiglifyAppState extends ConsumerState<GiglifyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // Watch the resolvedThemeProvider which gives the final ThemeMode
     final ThemeMode themeMode = ref.watch(resolvedThemeProvider);
 
     return MaterialApp.router(
