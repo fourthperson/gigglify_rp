@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:gigglify_rp/data/entity/api/joke_response.dart';
-import 'package:gigglify_rp/data/source/services/rest_service.dart';
+import 'package:gigglify_rp/data/source/remote/api/rest_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 

@@ -1,8 +1,8 @@
 import 'package:gigglify_rp/data/entity/db/saved_joke.dart';
-import 'package:gigglify_rp/data/source/db/objectbox.g.dart';
+import 'package:gigglify_rp/data/source/local/db/gig_db.dart';
+import 'package:gigglify_rp/data/source/local/db/objectbox.g.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 
-import 'package:gigglify_rp/data/source/db/gig_db.dart';
 import 'package:injectable/injectable.dart' hide Order;
 import 'package:logger/logger.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:gigglify_rp/data/source/services/prefs_service.dart';
+import 'package:gigglify_rp/data/source/local/prefs/prefs_service.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';

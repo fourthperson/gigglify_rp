@@ -62,4 +62,4 @@ flutter_intl:
   output_dir: lib/presentation/l10n/generated
 
 objectbox:
-  output_dir: data/source/db
+  output_dir: data/source/local/db

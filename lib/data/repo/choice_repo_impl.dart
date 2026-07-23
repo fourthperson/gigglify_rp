@@ -1,4 +1,4 @@
-import 'package:gigglify_rp/data/source/prefs/prefs_data_source.dart';
+import 'package:gigglify_rp/data/source/local/prefs/prefs_data_source.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
 import 'package:gigglify_rp/domain/entity/core/config.dart';
 import 'package:gigglify_rp/domain/repository/choice_repository.dart';

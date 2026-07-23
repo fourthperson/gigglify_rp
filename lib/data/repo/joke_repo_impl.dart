@@ -1,6 +1,6 @@
 import 'package:gigglify_rp/data/entity/api/joke_response.dart';
-import 'package:gigglify_rp/data/source/api/api_data_source.dart';
-import 'package:gigglify_rp/data/source/db/db_data_source.dart';
+import 'package:gigglify_rp/data/source/local/db/db_data_source.dart';
+import 'package:gigglify_rp/data/source/remote/api/api_data_source.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/repository/joke_repository.dart';
 
