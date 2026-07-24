@@ -14,14 +14,28 @@ class ChoiceNotifier extends StateNotifier<AsyncValue<Choice>> {
 
   void getChoice() async {
     state = const AsyncValue.loading();
-    final Choice choice = await _getUseCase.invoke();
-    state = AsyncValue.data(choice);
+    try {
+      final Choice choice = await _getUseCase.invoke();
+      state = AsyncValue.data(choice);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 
-  void saveChoice(Choice choice) async {
-    state = AsyncValue.loading();
-    await _saveUseCase.invoke(choice);
-    state = AsyncValue.data(choice);
+  Future<void> saveChoice(Choice newChoice) async {
+    // Store the current state to revert if the save fails
+    final AsyncValue<Choice> previousState = state;
+
+    // Optimistically update the UI
+    state = AsyncValue.data(newChoice);
+
+    try {
+      await _saveUseCase.invoke(newChoice);
+    } catch (e, st) {
+      // Revert UI
+      state = previousState;
+      state = AsyncValue.error(e, st);
+    }
   }
 }
 
