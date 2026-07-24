@@ -129,7 +129,6 @@ class _PreferenceModalState extends ConsumerState<PreferenceModal> {
                   );
                 },
               ),
-              const SizedBox(height: 10),
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),
