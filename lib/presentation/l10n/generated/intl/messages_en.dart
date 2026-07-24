@@ -51,6 +51,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "history_error": MessageLookupByLibrary.simpleMessage(
       "Error Loading History",
     ),
+    "label_back": MessageLookupByLibrary.simpleMessage("Back"),
+    "label_save": MessageLookupByLibrary.simpleMessage("Save"),
     "preferences": MessageLookupByLibrary.simpleMessage("Preferences"),
     "theme_dark": MessageLookupByLibrary.simpleMessage("Dark"),
     "theme_light": MessageLookupByLibrary.simpleMessage("Light"),

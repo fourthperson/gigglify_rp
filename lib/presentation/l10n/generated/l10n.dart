@@ -248,6 +248,16 @@ class S {
   String get theme_dark {
     return Intl.message('Dark', name: 'theme_dark', desc: '', args: []);
   }
+
+  /// `Save`
+  String get label_save {
+    return Intl.message('Save', name: 'label_save', desc: '', args: []);
+  }
+
+  /// `Back`
+  String get label_back {
+    return Intl.message('Back', name: 'label_back', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

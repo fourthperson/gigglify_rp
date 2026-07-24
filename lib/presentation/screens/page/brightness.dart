@@ -1,22 +1,20 @@
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
+import 'package:gigglify_rp/presentation/widget/list_tile.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
 
-class BrightnessModal extends ConsumerStatefulWidget {
-  const BrightnessModal({super.key});
+class BrightnessContent extends ConsumerStatefulWidget {
+  const BrightnessContent({super.key});
 
   @override
-  ConsumerState<BrightnessModal> createState() => _BrightnessModalState();
+  ConsumerState<BrightnessContent> createState() => _BrightnessModalState();
 }
 
-class _BrightnessModalState extends ConsumerState<BrightnessModal> {
+class _BrightnessModalState extends ConsumerState<BrightnessContent> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
@@ -44,7 +42,7 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
               const SizedBox(height: 10),
               Text(strings.title_theme, style: theme.textTheme.titleLarge),
               const SizedBox(height: 10),
-              _CategoryItem(
+              GigListTile(
                 checked: followSystem,
                 label: strings.follow_system_theme,
                 onTap: (bool _) {
@@ -129,41 +127,6 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _CategoryItem extends StatelessWidget {
-  final bool checked;
-  final String label;
-  final void Function(bool) onTap;
-
-  const _CategoryItem({
-    required this.checked,
-    required this.label,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
-    return ListTile(
-      dense: true,
-      onTap: () => onTap(!checked),
-      contentPadding: EdgeInsets.zero,
-      visualDensity: const VisualDensity(vertical: -4),
-      leading: Platform.isIOS
-          ? CupertinoCheckbox(
-              value: checked,
-              onChanged: (c) => onTap(c ?? false),
-              activeColor: theme.colorScheme.secondary,
-            )
-          : Checkbox(
-              value: checked,
-              onChanged: (c) => onTap(c ?? false),
-              activeColor: theme.colorScheme.secondary,
-            ),
-      title: Text(label, style: theme.textTheme.bodyLarge),
     );
   }
 }

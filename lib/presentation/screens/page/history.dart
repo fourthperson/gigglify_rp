@@ -6,18 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/history_provider.dart';
+import 'package:gigglify_rp/presentation/providers/joke_provider.dart';
+import 'package:gigglify_rp/presentation/widget/button.dart';
 import 'package:intl/intl.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
-import 'package:share_plus/share_plus.dart';
 
-class HistoryModal extends ConsumerStatefulWidget {
-  const HistoryModal({super.key});
+class HistoryContent extends ConsumerStatefulWidget {
+  final void Function() onBackTap;
+
+  const HistoryContent({required this.onBackTap, super.key});
 
   @override
-  ConsumerState<HistoryModal> createState() => _HistoryModalState();
+  ConsumerState<HistoryContent> createState() => _HistoryContentState();
 }
 
-class _HistoryModalState extends ConsumerState<HistoryModal> {
+class _HistoryContentState extends ConsumerState<HistoryContent> {
   late DateFormat dateFormat;
 
   @override
@@ -68,41 +71,53 @@ class _HistoryModalState extends ConsumerState<HistoryModal> {
       );
     }
 
-    return SafeArea(
-      child: RawScrollbar(
-        child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 10),
-              Center(
-                child: Text(
-                  strings.history,
-                  style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
-                ),
-              ),
-              const SizedBox(height: 10),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: asyncHistory.value?.length ?? 0,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (BuildContext context, int index) {
-                  final Joke joke = asyncHistory.value![index];
-                  return _HistoryItem(
-                    joke: joke,
-                    dateFormat: dateFormat,
-                    onTap: () => SharePlus.instance.share(
-                      ShareParams(text: joke.content),
-                    ),
-                  );
-                },
-              ),
-            ],
+    return Column(
+      children: [
+        const SizedBox(height: 10),
+        Center(
+          child: Text(
+            strings.history,
+            style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
           ),
         ),
-      ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: RawScrollbar(
+            child: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: asyncHistory.value?.length ?? 0,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int index) {
+                        final Joke joke = asyncHistory.value![index];
+                        return _HistoryItem(
+                          joke: joke,
+                          dateFormat: dateFormat,
+                          onTap: () => ref
+                              .read(jokeProvider.notifier)
+                              .shareJoke(joke.content),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: GigButton(onTap: widget.onBackTap, label: strings.label_back),
+        ),
+        const SizedBox(height: 24),
+      ],
     );
   }
 
@@ -144,7 +159,7 @@ class _Info extends StatelessWidget {
 
 class _HistoryItem extends StatelessWidget {
   final Joke joke;
-  final Function() onTap;
+  final void Function() onTap;
   final DateFormat? dateFormat;
 
   const _HistoryItem({
@@ -159,31 +174,36 @@ class _HistoryItem extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(joke.content, style: theme.textTheme.bodyMedium),
-            Row(
-              children: [
-                Text(
-                  joke.category.toUpperCase(),
-                  style: theme.textTheme.bodySmall,
-                ),
-                const Spacer(),
-                Text(
-                  dateFormat == null
-                      ? joke.time.toString()
-                      : dateFormat!.format(
-                          DateTime.fromMillisecondsSinceEpoch(joke.time),
-                        ),
-                  style: theme.textTheme.bodySmall,
-                ),
-              ],
-            ),
-          ],
-        ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            joke.content,
+            style: theme.textTheme.labelMedium?.copyWith(fontSize: 16),
+          ),
+          SizedBox(height: 4),
+          Row(
+            children: [
+              Text(
+                joke.category.toUpperCase(),
+                style: theme.textTheme.labelMedium,
+              ),
+              const Spacer(),
+              Text(
+                dateFormat == null
+                    ? joke.time.toString()
+                    : dateFormat!.format(
+                        DateTime.fromMillisecondsSinceEpoch(joke.time),
+                      ),
+                style: theme.textTheme.labelMedium,
+              ),
+            ],
+          ),
+          Divider(
+            thickness: 1,
+            color: theme.dividerColor.withValues(alpha: 0.1),
+          ),
+        ],
       ),
     );
   }

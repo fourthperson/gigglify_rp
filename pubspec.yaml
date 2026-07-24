@@ -36,6 +36,7 @@ dependencies:
   google_fonts: ^8.2.0
   ionicons_plus: ^0.2.5
   modal_bottom_sheet: ^3.0.0
+  smooth_page_indicator: ^2.0.1
 
 dev_dependencies:
   flutter_test:
