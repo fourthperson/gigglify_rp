@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
-import 'package:gigglify_rp/domain/use_case/get_joke_use_case.dart';
-import 'package:gigglify_rp/domain/use_case/save_joke_use_case.dart';
-import 'package:gigglify_rp/main.dart';
+import 'package:gigglify_rp/domain/use_case/joke_get_use_case.dart';
+import 'package:gigglify_rp/domain/use_case/joke_save_use_case.dart';
 
 class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
-  final GetJokeUseCase _getUseCase;
-  final SaveJokeUseCase _saveUseCase;
+  final JokeGetUseCase _getUseCase;
+  final JokeSaveUseCase _saveUseCase;
 
   JokeNotifier(this._getUseCase, this._saveUseCase)
     : super(const AsyncValue.loading());
@@ -16,7 +16,7 @@ class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
     state = const AsyncValue.loading();
     final Joke? joke = await _getUseCase.invoke();
     if (joke != null) {
-      _saveUseCase.invoke(joke);
+      await _saveUseCase.invoke(joke);
     }
     state = AsyncValue.data(joke);
   }
@@ -25,7 +25,7 @@ class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
 final StateNotifierProvider<JokeNotifier, AsyncValue<Joke?>> jokeProvider =
     StateNotifierProvider<JokeNotifier, AsyncValue<Joke?>>((Ref ref) {
       return JokeNotifier(
-        locator<GetJokeUseCase>(),
-        locator<SaveJokeUseCase>(),
+        locator<JokeGetUseCase>(),
+        locator<JokeSaveUseCase>(),
       );
     });

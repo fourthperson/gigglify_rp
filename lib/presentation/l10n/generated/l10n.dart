@@ -223,6 +223,31 @@ class S {
       args: [],
     );
   }
+
+  /// `Theme`
+  String get title_theme {
+    return Intl.message('Theme', name: 'title_theme', desc: '', args: []);
+  }
+
+  /// `Automatic (Follow system theme)`
+  String get follow_system_theme {
+    return Intl.message(
+      'Automatic (Follow system theme)',
+      name: 'follow_system_theme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Light`
+  String get theme_light {
+    return Intl.message('Light', name: 'theme_light', desc: '', args: []);
+  }
+
+  /// `Dark`
+  String get theme_dark {
+    return Intl.message('Dark', name: 'theme_dark', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

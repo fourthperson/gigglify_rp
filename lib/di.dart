@@ -1,82 +1,69 @@
-part of 'main.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get_it/get_it.dart';
+import 'package:gigglify_rp/data/source/local/db/gig_db.dart';
+import 'package:gigglify_rp/data/source/local/prefs/prefs_service.dart';
+import 'package:gigglify_rp/domain/entity/core/config.dart';
+import 'package:gigglify_rp/domain/entity/core/env.dart';
+import 'package:injectable/injectable.dart';
+import 'package:gigglify_rp/di.config.dart';
+import 'package:logger/logger.dart';
 
 final GetIt locator = GetIt.instance;
 
-Future<void> initDependencies() async {
-  // load .env file
-  await dotenv.load();
-  // read info from .env
-  final String baseUrl = dotenv.get('API_BASE_URL');
-  final List<String> apiPaths = dotenv.get('API_PATHS').split(' ');
-  final List<String> blacklistCategories = dotenv
-      .get('BLACKLIST_CATEGORIES')
-      .split(' ');
+@InjectableInit()
+Future<void> configureDependencies() async => await locator.init();
 
-  // logger
-  final Logger logger = Logger();
+@module
+abstract class GigglifyModule {
+  @lazySingleton
+  Logger get logger => Logger();
 
-  // network and database instances
-  final GigDb db = await GigDb.create();
-  final Dio dio = Dio(
-    BaseOptions(
-      connectTimeout: const Duration(milliseconds: 15000),
-      receiveTimeout: const Duration(milliseconds: 15000),
-      receiveDataWhenStatusError: false,
-      validateStatus: (status) => true,
-      contentType: 'application/json; charset=UTF-8',
-      baseUrl: baseUrl,
-      responseType: ResponseType.plain,
-    ),
-  );
-  dio.interceptors.clear();
-  if (kDebugMode) {
-    final Interceptor interceptor = LogInterceptor(
-      responseBody: true,
-      requestBody: true,
+  @lazySingleton
+  FlutterSecureStorage get flutterSecureStorage => FlutterSecureStorage();
+
+  @preResolve
+  @lazySingleton
+  Future<GigDb> gigDb() => GigDb.create();
+
+  @preResolve
+  @lazySingleton
+  Future<PrefsService> prefsService() async {
+    final PrefsService prefsService = PrefsService(
+      secureStorage: flutterSecureStorage,
     );
-    dio.interceptors.add(interceptor);
+    await prefsService.clearOnReinstall();
+    return prefsService;
   }
 
-  // preferences instance
-  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
-
-  // rest & preference utility services
-  final RestService restService = RestService(dio, logger: logger);
-  final PrefsService prefsService = PrefsService(secureStorage);
-  await prefsService.clearOnReinstall();
-
-  // data sources
-  final PrefsDataSource prefsDataSource = PrefsDataSourceImpl(
-    prefsService,
-    logger: logger,
-  );
-  final DatabaseDataSource databaseDataSource = DatabaseDataSourceImpl(
-    db,
-    logger: logger,
-  );
-  final ApiDataSource apiDataSource = ApiDataSourceImpl(
-    restService,
-    logger: logger,
+  @singleton
+  AppConfig get config => AppConfig(
+    categories: Env.apiPaths.split(' '),
+    blacklistable: Env.blacklistCategories.split(' '),
   );
 
-  // choice repository
-  final ChoiceRepository choiceRepository = ChoiceRepositoryImpl(
-    apiPaths,
-    blacklistCategories,
-    prefsDataSource,
-  );
-
-  // joke repository
-  final JokeRepository jokeRepository = JokeRepositoryImpl(
-    apiDataSource,
-    databaseDataSource,
-    logger: logger,
-  );
-
-  // use-cases
-  locator.registerSingleton(GetJokeUseCase(jokeRepository, choiceRepository));
-  locator.registerSingleton(SaveJokeUseCase(jokeRepository));
-  locator.registerSingleton(GetSavedJokesUseCase(jokeRepository));
-  locator.registerSingleton(GetChoiceUseCase(choiceRepository));
-  locator.registerSingleton(SaveChoiceUseCase(choiceRepository));
+  @lazySingleton
+  Dio dio() {
+    final Dio dio = Dio(
+      BaseOptions(
+        connectTimeout: const Duration(milliseconds: 15000),
+        receiveTimeout: const Duration(milliseconds: 15000),
+        receiveDataWhenStatusError: false,
+        validateStatus: (int? status) => true,
+        contentType: 'application/json; charset=UTF-8',
+        baseUrl: Env.apiBaseUrl,
+        responseType: ResponseType.plain,
+      ),
+    );
+    dio.interceptors.clear();
+    if (kDebugMode) {
+      final Interceptor interceptor = LogInterceptor(
+        responseBody: true,
+        requestBody: true,
+      );
+      dio.interceptors.add(interceptor);
+    }
+    return dio;
+  }
 }
