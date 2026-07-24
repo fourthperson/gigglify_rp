@@ -4,11 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
-import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/choice_provider.dart';
-import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
-import 'package:ionicons_plus/ionicons_plus.dart';
 
 class PreferenceModal extends ConsumerStatefulWidget {
   const PreferenceModal({super.key});
