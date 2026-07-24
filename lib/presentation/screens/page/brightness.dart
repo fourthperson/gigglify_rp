@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
-import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
+import 'package:gigglify_rp/presentation/providers/theme_provider.dart';
 import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:gigglify_rp/presentation/widget/list_tile.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';

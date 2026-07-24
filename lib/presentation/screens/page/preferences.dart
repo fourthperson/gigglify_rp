@@ -50,7 +50,7 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
       strings.blacklist_nsfw,
     ];
 
-    final AsyncValue<Choice> asyncChoices = ref.watch(choiceNotifier);
+    final AsyncValue<Choice> asyncChoices = ref.watch(choiceProvider);
 
     if (asyncChoices.isLoading || asyncChoices.isRefreshing) {
       return SafeArea(
@@ -175,10 +175,10 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
     );
   }
 
-  void _loadChoices() => ref.read(choiceNotifier.notifier).getChoice();
+  void _loadChoices() => ref.read(choiceProvider.notifier).getChoice();
 
   void _saveChoices(Choice choice) =>
-      ref.read(choiceNotifier.notifier).saveChoice(choice);
+      ref.read(choiceProvider.notifier).saveChoice(choice);
 
   List<int> _toggleBlacklist(List<int> current, int index) {
     final List<int> list = List<int>.from(current);

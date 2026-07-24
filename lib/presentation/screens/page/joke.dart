@@ -27,7 +27,6 @@ class _JokeContentState extends ConsumerState<JokeContent> {
   @override
   void initState() {
     super.initState();
-    // Delay the call to _loadJoke until after the first frame has been built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadJoke();
     });
@@ -66,6 +65,8 @@ class _JokeContentState extends ConsumerState<JokeContent> {
       );
     }
 
+    final Joke joke = asyncJoke.value!;
+
     return Scaffold(
       body: SafeArea(
         child: GestureDetector(
@@ -78,17 +79,14 @@ class _JokeContentState extends ConsumerState<JokeContent> {
               children: [
                 const SizedBox(height: 10),
                 Center(
-                  child: Text(
-                    asyncJoke.value?.category ?? '',
-                    style: theme.textTheme.titleLarge,
-                  ),
+                  child: Text(joke.category, style: theme.textTheme.titleLarge),
                 ),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        asyncJoke.value?.content ?? '',
+                        joke.content,
                         textAlign: TextAlign.center,
                         style: theme.textTheme.bodyMedium,
                       ),
@@ -113,7 +111,7 @@ class _JokeContentState extends ConsumerState<JokeContent> {
                             theme.colorScheme.secondary,
                         onTap: () => ref
                             .read(jokeProvider.notifier)
-                            .shareJoke(asyncJoke.value?.content ?? ''),
+                            .shareJoke(joke.content),
                       ),
                       _ActionButton(
                         iconData: Icons.history_outlined,
