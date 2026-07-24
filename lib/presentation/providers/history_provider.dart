@@ -1,11 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
-import 'package:gigglify_rp/domain/use_case/get_saved_jokes_use_case.dart';
-import 'package:gigglify_rp/main.dart';
+import 'package:gigglify_rp/domain/use_case/joke_history_get_use_case.dart';
 
 class HistoryNotifier extends StateNotifier<AsyncValue<List<Joke>>> {
-  final GetSavedJokesUseCase _getUseCase;
+  final JokeHistoryGetUseCase _getUseCase;
 
   HistoryNotifier(this._getUseCase) : super(const AsyncValue.loading());
 
@@ -19,5 +19,5 @@ class HistoryNotifier extends StateNotifier<AsyncValue<List<Joke>>> {
 final StateNotifierProvider<HistoryNotifier, AsyncValue<List<Joke>>>
 historyProvider =
     StateNotifierProvider<HistoryNotifier, AsyncValue<List<Joke>>>((Ref ref) {
-      return HistoryNotifier(locator<GetSavedJokesUseCase>());
+      return HistoryNotifier(locator<JokeHistoryGetUseCase>());
     });

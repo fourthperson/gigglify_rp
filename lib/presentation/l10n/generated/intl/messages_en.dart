@@ -43,12 +43,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "category_pun": MessageLookupByLibrary.simpleMessage("Pun"),
     "category_spooky": MessageLookupByLibrary.simpleMessage("Spooky"),
     "done": MessageLookupByLibrary.simpleMessage("Done"),
+    "follow_system_theme": MessageLookupByLibrary.simpleMessage(
+      "Automatic (Follow system theme)",
+    ),
     "history": MessageLookupByLibrary.simpleMessage("History"),
     "history_empty": MessageLookupByLibrary.simpleMessage("Empty"),
     "history_error": MessageLookupByLibrary.simpleMessage(
       "Error Loading History",
     ),
     "preferences": MessageLookupByLibrary.simpleMessage("Preferences"),
+    "theme_dark": MessageLookupByLibrary.simpleMessage("Dark"),
+    "theme_light": MessageLookupByLibrary.simpleMessage("Light"),
+    "title_theme": MessageLookupByLibrary.simpleMessage("Theme"),
     "usage_description": MessageLookupByLibrary.simpleMessage(
       "Press anywhere on the screen for another joke",
     ),
