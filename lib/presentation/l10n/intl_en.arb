@@ -25,5 +25,7 @@
   "title_theme": "Theme",
   "follow_system_theme": "Automatic (Follow system theme)",
   "theme_light": "Light",
-  "theme_dark": "Dark"
+  "theme_dark": "Dark",
+  "label_save": "Save",
+  "label_back": "Back"
 }

@@ -4,6 +4,7 @@ import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
 import 'package:gigglify_rp/domain/use_case/joke_get_use_case.dart';
 import 'package:gigglify_rp/domain/use_case/joke_save_use_case.dart';
+import 'package:share_plus/share_plus.dart';
 
 class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
   final JokeGetUseCase _getUseCase;
@@ -19,6 +20,10 @@ class JokeNotifier extends StateNotifier<AsyncValue<Joke?>> {
       await _saveUseCase.invoke(joke);
     }
     state = AsyncValue.data(joke);
+  }
+
+  Future<void> shareJoke(String content) async {
+    await SharePlus.instance.share(ShareParams(text: content));
   }
 }
 
