@@ -35,6 +35,7 @@ analyzer:
     - "**/**.g.dart"
     - "**/**.freezed.dart"
     - "lib/presentation/l10n/*"
+
   errors:
     todo: ignore
     invalid_annotation_target: ignore

@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/navigation/route_handler.gr.dart';
-import 'package:gigglify_rp/presentation/theme/theme.dart';
 
 @RoutePage()
 class SplashScreen extends StatefulWidget {
@@ -27,11 +26,15 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     final S strings = S.of(context);
+    final ThemeData theme = Theme.of(context);
 
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: Text(strings.app_name, style: textBold.copyWith(fontSize: 48)),
+          child: Text(
+            strings.app_name,
+            style: theme.textTheme.titleLarge?.copyWith(fontSize: 48),
+          ),
         ),
       ),
     );
