@@ -4,7 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/navigation/route_handler.dart';
-import 'package:gigglify_rp/presentation/providers/theme_notifier.dart'; // Import the updated theme_notifier
+import 'package:gigglify_rp/presentation/providers/theme_provider.dart'; // Import the updated theme_notifier
 import 'package:gigglify_rp/presentation/theme/theme.dart';
 
 class GiglifyApp extends ConsumerStatefulWidget {

@@ -1,23 +1,21 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/joke.dart';
-import 'package:gigglify_rp/domain/use_case/joke_history_get_use_case.dart';
+import 'package:gigglify_rp/presentation/providers/use_case_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class HistoryNotifier extends StateNotifier<AsyncValue<List<Joke>>> {
-  final JokeHistoryGetUseCase _getUseCase;
+part 'history_provider.g.dart';
 
-  HistoryNotifier(this._getUseCase) : super(const AsyncValue.loading());
+@riverpod
+class HistoryNotifier extends _$HistoryNotifier {
+  @override
+  FutureOr<List<Joke>> build() async {
+    // Initial fetch happens automatically when the provider is first watched
+    return ref.read(jokeHistoryGetUseCaseProvider).invoke();
+  }
 
   Future<void> fetchHistory() async {
-    state = AsyncValue.loading();
-    final List<Joke> jokes = await _getUseCase.invoke();
-    state = AsyncValue.data(jokes);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      return ref.read(jokeHistoryGetUseCaseProvider).invoke();
+    });
   }
 }
-
-final StateNotifierProvider<HistoryNotifier, AsyncValue<List<Joke>>>
-historyProvider =
-    StateNotifierProvider<HistoryNotifier, AsyncValue<List<Joke>>>((Ref ref) {
-      return HistoryNotifier(locator<JokeHistoryGetUseCase>());
-    });

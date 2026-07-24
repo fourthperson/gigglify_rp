@@ -1,48 +1,38 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:gigglify_rp/di.dart';
 import 'package:gigglify_rp/domain/entity/choice.dart';
-import 'package:gigglify_rp/domain/use_case/choice_get_use_case.dart';
-import 'package:gigglify_rp/domain/use_case/choice_set_use_case.dart';
+import 'package:gigglify_rp/presentation/providers/use_case_providers.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class ChoiceNotifier extends StateNotifier<AsyncValue<Choice>> {
-  final ChoiceGetUseCase _getUseCase;
-  final ChoiceSetUseCase _saveUseCase;
+part 'choice_provider.g.dart';
 
-  ChoiceNotifier(this._getUseCase, this._saveUseCase)
-    : super(const AsyncValue.loading());
+@riverpod
+class ChoiceNotifier extends _$ChoiceNotifier {
+  @override
+  FutureOr<Choice> build() async {
+    // Returning the initial fetch directly inside build() initializes
+    // the state as AsyncValue.loading() automatically while loading!
+    return ref.read(choiceGetUseCaseProvider).invoke();
+  }
 
-  void getChoice() async {
+  Future<void> getChoice() async {
     state = const AsyncValue.loading();
-    try {
-      final Choice choice = await _getUseCase.invoke();
-      state = AsyncValue.data(choice);
-    } catch (e, st) {
-      state = AsyncValue.error(e, st);
-    }
+    state = await AsyncValue.guard(() async {
+      return ref.read(choiceGetUseCaseProvider).invoke();
+    });
   }
 
   Future<void> saveChoice(Choice newChoice) async {
-    // Store the current state to revert if the save fails
-    final AsyncValue<Choice> previousState = state;
+    // Preserve current state for optimistic rollback
+    final previousState = state;
 
-    // Optimistically update the UI
+    // Optimistically update state
     state = AsyncValue.data(newChoice);
 
     try {
-      await _saveUseCase.invoke(newChoice);
+      await ref.read(choiceSetUseCaseProvider).invoke(newChoice);
     } catch (e, st) {
-      // Revert UI
+      // Revert back to previous state before setting error
       state = previousState;
       state = AsyncValue.error(e, st);
     }
   }
 }
-
-final StateNotifierProvider<ChoiceNotifier, AsyncValue<Choice>> choiceNotifier =
-    StateNotifierProvider<ChoiceNotifier, AsyncValue<Choice>>((Ref ref) {
-      return ChoiceNotifier(
-        locator<ChoiceGetUseCase>(),
-        locator<ChoiceSetUseCase>(),
-      );
-    });
