@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gigglify_rp/domain/entity/theme_mode.dart';
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
 import 'package:gigglify_rp/presentation/providers/theme_notifier.dart';
+import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
 
 class BrightnessModal extends ConsumerStatefulWidget {
@@ -20,11 +21,16 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
   Widget build(BuildContext context) {
     final S strings = S.of(context);
     final ThemeData theme = Theme.of(context);
+    final BrandColors? brandColors = theme.extension<BrandColors>();
 
     final GigThemeMode mode = ref.watch(themeProvider);
     final bool followSystem = mode == GigThemeMode.system;
     final bool lightMode = mode == GigThemeMode.light;
     final bool darkMode = mode == GigThemeMode.dark;
+
+    final Color activeColor =
+        brandColors?.secondaryDark ?? theme.colorScheme.secondary;
+    final Color? inactiveColor = theme.iconTheme.color?.withValues(alpha: 0.3);
 
     return RawScrollbar(
       child: SingleChildScrollView(
@@ -77,16 +83,14 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
                           icon: Icon(
                             Ionicons.sunny_outline,
                             size: 36,
-                            color: lightMode
-                                ? theme.colorScheme.secondary
-                                : theme.iconTheme.color?.withValues(alpha: 0.3),
+                            color: lightMode ? activeColor : inactiveColor,
                           ),
                         ),
                         Text(
                           strings.theme_light,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: lightMode
-                                ? theme.colorScheme.secondary
+                                ? activeColor
                                 : theme.textTheme.bodySmall?.color,
                           ),
                         ),
@@ -103,16 +107,14 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
                           icon: Icon(
                             Ionicons.moon_outline,
                             size: 36,
-                            color: darkMode
-                                ? theme.colorScheme.secondary
-                                : theme.iconTheme.color?.withValues(alpha: 0.3),
+                            color: darkMode ? activeColor : inactiveColor,
                           ),
                         ),
                         Text(
                           strings.theme_dark,
                           style: theme.textTheme.labelMedium?.copyWith(
                             color: darkMode
-                                ? theme.colorScheme.secondary
+                                ? activeColor
                                 : theme.textTheme.bodySmall?.color,
                           ),
                         ),
@@ -121,6 +123,7 @@ class _BrightnessModalState extends ConsumerState<BrightnessModal> {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
               SizedBox(height: MediaQuery.of(context).viewPadding.bottom),
             ],
           ),

@@ -11,6 +11,7 @@ import 'package:gigglify_rp/presentation/screens/modal/history.dart';
 import 'package:gigglify_rp/presentation/screens/modal/preferences.dart';
 
 import 'package:gigglify_rp/presentation/l10n/generated/l10n.dart';
+import 'package:gigglify_rp/presentation/theme/theme.dart';
 import 'package:ionicons_plus/ionicons_plus.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
@@ -34,6 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final S strings = S.of(context);
     final ThemeData theme = Theme.of(context);
+    final BrandColors? brandColors = theme.extension<BrandColors>();
 
     final AsyncValue<Joke?> asyncJoke = ref.watch(jokeProvider);
 
@@ -104,7 +106,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       _ActionButton(
                         iconData: Ionicons.share_social_outline,
                         iconSize: 42,
-                        color: theme.colorScheme.secondary,
+                        color:
+                            brandColors?.secondaryDark ??
+                            theme.colorScheme.secondary,
                         onTap: () => SharePlus.instance.share(
                           ShareParams(text: asyncJoke.value?.content ?? ''),
                         ),
@@ -118,7 +122,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         iconData: Icons.settings_brightness_outlined,
                         onTap: () => _showModal((_) => const BrightnessModal()),
                         iconSize: 24,
-                        color: theme.colorScheme.secondary,
+                        color:
+                            brandColors?.secondaryDark ??
+                            theme.colorScheme.secondary,
                       ),
                     ],
                   ),
