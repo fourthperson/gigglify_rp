@@ -71,6 +71,8 @@ class _HistoryContentState extends ConsumerState<HistoryContent> {
       );
     }
 
+    final List<Joke> history = asyncHistory.value!;
+
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -93,10 +95,10 @@ class _HistoryContentState extends ConsumerState<HistoryContent> {
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
-                      itemCount: asyncHistory.value?.length ?? 0,
+                      itemCount: history.length,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
-                        final Joke joke = asyncHistory.value![index];
+                        final Joke joke = history[index];
                         return _HistoryItem(
                           joke: joke,
                           dateFormat: dateFormat,

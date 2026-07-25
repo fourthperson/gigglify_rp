@@ -17,10 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(
-      const Duration(milliseconds: 2500),
-      () => context.router.replace(const HomeRoute()),
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer(
+        const Duration(milliseconds: 2500),
+        () => context.router.replace(const HomeRoute()),
+      );
+    });
   }
 
   @override

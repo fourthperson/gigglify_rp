@@ -27,9 +27,7 @@ class _JokeContentState extends ConsumerState<JokeContent> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _loadJoke();
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadJoke());
   }
 
   @override

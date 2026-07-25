@@ -65,6 +65,8 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
       );
     }
 
+    final Choice choice = asyncChoices.value!;
+
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -99,11 +101,10 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
                           ListView.builder(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
-                            itemCount: asyncChoices.value!.choices.length,
+                            itemCount: choice.choices.length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (_, int index) {
-                              final List<bool> choices =
-                                  asyncChoices.value!.choices;
+                              final List<bool> choices = choice.choices;
                               return GigListTile(
                                 checked: choices[index],
                                 label: categoryTexts[index],
@@ -111,8 +112,7 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
                                   _saveChoices(
                                     Choice(
                                       choices: _toggleCategory(choices, index),
-                                      blacklisted:
-                                          asyncChoices.value!.blacklisted,
+                                      blacklisted: choice.blacklisted,
                                     ),
                                   );
                                 },
@@ -131,16 +131,14 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
                             itemCount: blacklistTexts.length,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (_, int index) {
-                              final List<int> blacklist =
-                                  asyncChoices.value!.blacklisted;
-
+                              final List<int> blacklist = choice.blacklisted;
                               return GigListTile(
                                 checked: blacklist.contains(index),
                                 label: blacklistTexts[index],
                                 onTap: (bool checked) {
                                   _saveChoices(
                                     Choice(
-                                      choices: asyncChoices.value!.choices,
+                                      choices: choice.choices,
                                       blacklisted: _toggleBlacklist(
                                         blacklist,
                                         index,
@@ -183,11 +181,7 @@ class _PreferenceContentState extends ConsumerState<PreferenceContent> {
   List<int> _toggleBlacklist(List<int> current, int index) {
     final List<int> list = List<int>.from(current);
     final int foundIndex = list.indexWhere((item) => item == index);
-    if (foundIndex != -1) {
-      list.removeAt(foundIndex); // Fixed index bug (was removeAt(index))
-    } else {
-      list.add(index);
-    }
+    foundIndex != -1 ? list.removeAt(foundIndex) : list.add(index);
     return list;
   }
 

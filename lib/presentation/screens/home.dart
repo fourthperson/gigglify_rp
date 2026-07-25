@@ -16,6 +16,8 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController controller = PageController(initialPage: 1);
+  final Duration duration = Duration(milliseconds: 300);
+  final Curve curve = Curves.easeInOut;
 
   @override
   void dispose() {
@@ -25,8 +27,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Duration duration = Duration(milliseconds: 300);
-    final Curve curve = Curves.easeInOut;
     final ThemeData theme = Theme.of(context);
 
     return PopScope(
@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       onPopInvokedWithResult: (bool didPop, Object? result) async {
         if (didPop) return;
         if (controller.page != 1) {
-          await controller.animateToPage(1, duration: duration, curve: curve);
+          await _page(1);
         }
       },
       child: Scaffold(
@@ -45,32 +45,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 controller: controller,
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
-                  PreferenceContent(
-                    onSaveTap: () => controller.animateToPage(
-                      1,
-                      duration: duration,
-                      curve: curve,
-                    ),
-                  ),
+                  PreferenceContent(onSaveTap: () => _page(1)),
                   JokeContent(
-                    onHistoryTap: () => controller.animateToPage(
-                      2,
-                      duration: duration,
-                      curve: curve,
-                    ),
-                    onPreferenceTap: () => controller.animateToPage(
-                      0,
-                      duration: duration,
-                      curve: curve,
-                    ),
+                    onHistoryTap: () => _page(2),
+                    onPreferenceTap: () => _page(0),
                   ),
-                  HistoryContent(
-                    onBackTap: () => controller.animateToPage(
-                      1,
-                      duration: duration,
-                      curve: curve,
-                    ),
-                  ),
+                  HistoryContent(onBackTap: () => _page(1)),
                 ],
               ),
               Align(
@@ -81,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     controller: controller,
                     count: 3,
                     effect: ExpandingDotsEffect(
-                      dotHeight: 8.0,
+                      dotHeight: 4.0,
                       dotWidth: 8.0,
                       activeDotColor: theme.colorScheme.secondary,
                       dotColor: theme.colorScheme.onSurface.withValues(
@@ -96,5 +76,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _page(int page) async {
+    await controller.animateToPage(page, duration: duration, curve: curve);
   }
 }
